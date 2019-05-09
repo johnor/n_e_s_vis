@@ -9,5 +9,6 @@ public:
     void draw();
 
 private:
-    Nes *nes_;
+    uint32_t jump_to_address_{0u};
+    Nes *nes_{nullptr};
 };
