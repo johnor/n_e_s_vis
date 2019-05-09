@@ -20,15 +20,15 @@ void NesWidget::draw() {
 
     if (ImGui::Button("Jump to address")) {
         nes_->reset();
-        nes_->cpu_registers_.pc = static_cast<uint16_t>(jump_to_address_);
+        nes_->cpu_registers_.pc = jump_to_address_;
     }
     ImGui::SameLine();
     ImGui::InputScalar("",
-            ImGuiDataType_U32,
+            ImGuiDataType_U16,
             &jump_to_address_,
             NULL,
             NULL,
-            "%08X",
+            "%04hx",
             ImGuiInputTextFlags_CharsHexadecimal);
 
     ImGui::Text("Curr cycle: %i", nes_->cycle());

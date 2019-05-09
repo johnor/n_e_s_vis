@@ -2,7 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
   imgui
-  URL "https://github.com/ocornut/imgui/archive/v1.66.zip"
+  URL "https://github.com/ocornut/imgui/archive/v1.70.zip"
 )
 
 FetchContent_GetProperties(imgui)
