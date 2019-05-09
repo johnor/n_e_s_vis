@@ -9,9 +9,9 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(nes_core)
-if(NOT googletest_POPULATED)
+if(NOT nes_core_POPULATED)
     FetchContent_Populate(nes_core)
-    add_subdirectory(${nes_core_SOURCE_DIR} ${nes_core_BINARY_DIR})
+    add_subdirectory(${nes_core_SOURCE_DIR} ${nes_core_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
 add_executable(${PROJECT_NAME}
