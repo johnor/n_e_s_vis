@@ -49,9 +49,9 @@ void NesWidget::draw() {
 
     const uint16_t pc = nes_->cpu_registers_.pc;
     ImGui::Text("Mem at PC: %02hhx %02hhx %02hhx",
-                    nes_->mmu_->read_byte(pc),
-                    nes_->mmu_->read_byte(pc+1),
-                    nes_->mmu_->read_byte(pc+2));
+            nes_->mmu_->read_byte(pc),
+            nes_->mmu_->read_byte(pc + 1),
+            nes_->mmu_->read_byte(pc + 2));
 
     ImGui::End();
 }

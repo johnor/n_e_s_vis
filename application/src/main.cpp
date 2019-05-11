@@ -8,8 +8,8 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 int main(int argc, char **argv) {
     sf::RenderWindow window(sf::VideoMode(800, 600), "n_e_s visulization");
