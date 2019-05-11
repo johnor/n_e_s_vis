@@ -1,0 +1,63 @@
+language: cpp
+dist: xenial
+
+matrix:
+  include:
+    - name: "clang-tidy 7"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+          packages:
+            - clang-7
+            - clang-tidy-7
+            - libstdc++-7-dev
+            # sfml dependencies
+            - libxrandr-dev
+            - libudev-dev
+            - libopenal-dev
+            - libflac-dev
+            - libvorbis-dev
+            - libgl1-mesa-dev
+      script:
+        - CXX=clang++-7 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+        - run-clang-tidy-7.py -q -p . "application" -header-filter=".*/application/.*"
+
+    - name: "clang-format"
+      addons:
+        apt:
+          packages:
+            - clang-format
+      before_script: []
+      script:
+        - find application -name *.h -o -name *.cpp | xargs clang-format -style=file -i
+        - git diff --exit-code
+
+    - name: "gcc 7"
+      addons: &gcc7
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            # sfml dependencies
+            - libxrandr-dev
+            - libudev-dev
+            - libopenal-dev
+            - libflac-dev
+            - libvorbis-dev
+            - libgl1-mesa-dev
+      env: MATRIX_EVAL="CXX=g++-7 BUILD_TYPE=Debug"
+
+    - name: "gcc 7 release"
+      addons: *gcc7
+      env: MATRIX_EVAL="CXX=g++-7 BUILD_TYPE=Release"
+
+before_script:
+  - mkdir _build && cd _build
+  - eval "${MATRIX_EVAL}"
+
+script:
+  - cmake -DCMAKE_BUILD_TYPE="$BUILD_TYPE" $CMAKE_EXTRA_OPTIONS ..
+  - cmake --build . --parallel 2
