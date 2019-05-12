@@ -26,12 +26,12 @@ void NesWidget::draw() {
     ImGui::InputScalar("",
             ImGuiDataType_U16,
             &jump_to_address_,
-            NULL,
-            NULL,
+            nullptr,
+            nullptr,
             "%04hx",
             ImGuiInputTextFlags_CharsHexadecimal);
 
-    ImGui::Text("Curr cycle: %i", nes_->cycle());
+    ImGui::Text("Curr cycle: %lu", nes_->cycle());
 
     ImGui::Text("%s: %04hx", "pc", nes_->cpu_registers_.pc);
     ImGui::SameLine();

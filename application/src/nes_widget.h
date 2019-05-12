@@ -4,7 +4,7 @@
 
 class NesWidget {
 public:
-    NesWidget(Nes *nes);
+    explicit NesWidget(Nes *nes);
 
     void draw();
 

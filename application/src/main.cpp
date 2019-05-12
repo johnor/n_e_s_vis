@@ -8,18 +8,13 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include <iostream>
 #include <stdexcept>
+#include <iostream>
 
 int main(int argc, char **argv) {
     sf::RenderWindow window(sf::VideoMode(800, 600), "n_e_s visulization");
     window.setVerticalSyncEnabled(true);
     ImGui::SFML::Init(window);
-
-    sf::Color bgColor;
-    float color[3] = {0.f, 0.f, 0.f};
-
-    std::vector<float> times;
 
     Nes nes;
     NesWidget nesWidget(&nes);
@@ -27,7 +22,7 @@ int main(int argc, char **argv) {
     try {
         nes.load_rom(argv[1]);
 
-        sf::Clock deltaClock;
+        sf::Clock delta_clock;
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
@@ -38,42 +33,14 @@ int main(int argc, char **argv) {
                 }
             }
 
-            sf::Time t = deltaClock.restart();
-            times.push_back((float)t.asMilliseconds());
-            ImGui::SFML::Update(window, t);
+            const sf::Time delta_time = delta_clock.restart();
+            ImGui::SFML::Update(window, delta_time);
 
             ImGui::ShowDemoWindow();
 
             nesWidget.draw();
 
-            ImGui::Begin("Sample window");
-
-            if (ImGui::ColorEdit3("Background color", color)) {
-                bgColor.r = static_cast<sf::Uint8>(color[0] * 255.f);
-                bgColor.g = static_cast<sf::Uint8>(color[1] * 255.f);
-                bgColor.b = static_cast<sf::Uint8>(color[2] * 255.f);
-            }
-
-            ImGui::End();
-
-            ImGui::Begin("Test");
-            {
-                ImGui::PlotLines("Frame Times", times.data(), times.size());
-                ImGui::PlotLines(
-                        "Sin",
-                        [](void *data, int idx) { return sinf(idx * 0.2f); },
-                        NULL,
-                        100);
-                // Display contents in a scrolling region
-                ImGui::TextColored(ImVec4(1, 1, 0, 1), "Important Stuff");
-                ImGui::BeginChild("Scrolling");
-                for (int n = 0; n < 50; n++)
-                    ImGui::Text("%04d: Some text", n);
-                ImGui::EndChild();
-            }
-            ImGui::End();
-
-            window.clear(bgColor);
+            window.clear();
             ImGui::SFML::Render(window);
             window.display();
         }
