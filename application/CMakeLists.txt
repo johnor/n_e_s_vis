@@ -28,7 +28,6 @@ target_link_libraries(${PROJECT_NAME}
         sfml-window
         sfml-system
         sfml-graphics
-        sfml-main
         imgui-sfml
 )
 
