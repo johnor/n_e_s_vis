@@ -20,6 +20,8 @@ add_executable(${PROJECT_NAME}
    src/nes.h
    src/nes_widget.h
    src/nes_widget.cpp
+   src/screen.h
+   src/screen.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
