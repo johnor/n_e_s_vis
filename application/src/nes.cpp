@@ -42,3 +42,19 @@ void Nes::load_rom(const std::string &filepath) {
 uint64_t Nes::cycle() const {
     return cycle_;
 }
+
+n_e_s::core::ICpu &Nes::cpu() {
+    return *cpu_;
+}
+
+n_e_s::core::IPpu &Nes::ppu() {
+    return *ppu_;
+}
+
+n_e_s::core::IMmu &Nes::mmu() {
+    return *mmu_;
+}
+
+n_e_s::core::ICpu::Registers &Nes::registers() {
+    return cpu_registers_;
+}

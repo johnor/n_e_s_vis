@@ -13,13 +13,17 @@ public:
     Nes();
 
     void execute();
-
     void reset();
 
     void load_rom(const std::string &filepath);
 
     uint64_t cycle() const;
+    n_e_s::core::ICpu &cpu();
+    n_e_s::core::IPpu &ppu();
+    n_e_s::core::IMmu &mmu();
+    n_e_s::core::ICpu::Registers &registers();
 
+private:
     n_e_s::core::IPpu::Registers ppu_registers_{};
     std::unique_ptr<n_e_s::core::IPpu> ppu_;
 

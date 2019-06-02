@@ -20,7 +20,7 @@ void NesWidget::draw() {
 
     if (ImGui::Button("Jump to address")) {
         nes_->reset();
-        nes_->cpu_registers_.pc = jump_to_address_;
+        nes_->registers().pc = jump_to_address_;
     }
     ImGui::SameLine();
     ImGui::InputScalar("",
@@ -33,25 +33,25 @@ void NesWidget::draw() {
 
     ImGui::Text("Curr cycle: %lu", nes_->cycle());
 
-    ImGui::Text("%s: %04hx", "pc", nes_->cpu_registers_.pc);
+    ImGui::Text("%s: %04hx", "pc", nes_->registers().pc);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "a", nes_->cpu_registers_.a);
+    ImGui::Text("%s: %02hhx", "a", nes_->registers().a);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "x", nes_->cpu_registers_.x);
+    ImGui::Text("%s: %02hhx", "x", nes_->registers().x);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "y", nes_->cpu_registers_.y);
+    ImGui::Text("%s: %02hhx", "y", nes_->registers().y);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "p", nes_->cpu_registers_.p);
+    ImGui::Text("%s: %02hhx", "p", nes_->registers().p);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "sp", nes_->cpu_registers_.sp);
+    ImGui::Text("%s: %02hhx", "sp", nes_->registers().sp);
 
     ImGui::Spacing();
 
-    const uint16_t pc = nes_->cpu_registers_.pc;
+    const uint16_t pc = nes_->registers().pc;
     ImGui::Text("Mem at PC: %02hhx %02hhx %02hhx",
-            nes_->mmu_->read_byte(pc),
-            nes_->mmu_->read_byte(pc + 1),
-            nes_->mmu_->read_byte(pc + 2));
+            nes_->mmu().read_byte(pc),
+            nes_->mmu().read_byte(pc + 1),
+            nes_->mmu().read_byte(pc + 2));
 
     ImGui::End();
 }

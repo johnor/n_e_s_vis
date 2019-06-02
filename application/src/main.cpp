@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     ImGui::SFML::Init(window);
 
     Nes nes;
-    NesWidget nesWidget(&nes);
+    NesWidget nes_widget(&nes);
 
     try {
         if (argc > 1) {
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 
             ImGui::ShowDemoWindow();
 
-            nesWidget.draw();
+            nes_widget.draw();
 
             window.clear();
             ImGui::SFML::Render(window);
