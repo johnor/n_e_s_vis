@@ -71,6 +71,14 @@ int main(int argc, char **argv) {
 
             window.clear();
 
+            if (ImGui::IsMouseDown(0)) {
+                auto pos = sf::Vector2f(ImGui::GetMousePos());
+                pos.x /= PIXEL_SIZE;
+                pos.y /= PIXEL_SIZE;
+
+                screen.set_pixel(std::lround(pos.x), std::lround(pos.y), 0, 0, 255);
+            }
+
             ImGui::ShowDemoWindow();
             nes_widget.draw();
             screen.draw(window);
