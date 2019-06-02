@@ -20,7 +20,9 @@ int main(int argc, char **argv) {
     NesWidget nesWidget(&nes);
 
     try {
-        nes.load_rom(argv[1]);
+        if (argc > 1) {
+            nes.load_rom(argv[1]);
+        }
 
         sf::Clock delta_clock;
         while (window.isOpen()) {
