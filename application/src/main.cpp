@@ -76,7 +76,8 @@ int main(int argc, char **argv) {
                 pos.x /= PIXEL_SIZE;
                 pos.y /= PIXEL_SIZE;
 
-                screen.set_pixel(std::lround(pos.x), std::lround(pos.y), 0, 0, 255);
+                screen.set_pixel(
+                        std::lround(pos.x), std::lround(pos.y), 0, 0, 255);
             }
 
             ImGui::ShowDemoWindow();

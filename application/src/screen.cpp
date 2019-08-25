@@ -18,7 +18,7 @@ void Screen::set_pixel(unsigned int x,
 }
 
 void Screen::set_pixel(unsigned int x, unsigned int y, uint32_t color) {
-   set_pixel(x, y, sf::Color(color));
+    set_pixel(x, y, sf::Color(color));
 }
 
 void Screen::set_pixel(unsigned int x, unsigned int y, const sf::Color &color) {
