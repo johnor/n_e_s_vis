@@ -20,5 +20,5 @@ add_library(imgui-sfml
             ${imgui-sfml_SOURCE_DIR}/imconfig-SFML.h
             ${imgui-sfml_SOURCE_DIR}/imgui-SFML.cpp)
 target_include_directories(imgui-sfml SYSTEM PUBLIC ${ImGui_ROOT} ${imgui-sfml_SOURCE_DIR})
-target_link_libraries(imgui-sfml PUBLIC OpenGL::GL sfml-graphics sfml-window)
+target_link_libraries(imgui-sfml PUBLIC OpenGL::GL sfml-graphics sfml-window sfml-system)
 target_compile_definitions(imgui-sfml PUBLIC -DIMGUI_USER_CONFIG="imconfig-SFML.h")
