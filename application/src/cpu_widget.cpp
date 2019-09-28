@@ -17,6 +17,12 @@ void CpuWidget::draw() {
             nes_->execute();
         }
     }
+    ImGui::SameLine();
+    if (ImGui::Button("Step 10000")) {
+        for (int i = 0; i < 10000; ++i) {
+            nes_->execute();
+        }
+    }
 
     if (ImGui::Button("Jump to address")) {
         nes_->reset();
