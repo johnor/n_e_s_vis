@@ -21,7 +21,8 @@ public:
     n_e_s::core::ICpu &cpu();
     n_e_s::core::IPpu &ppu();
     n_e_s::core::IMmu &mmu();
-    n_e_s::core::ICpu::Registers &registers();
+    n_e_s::core::ICpu::Registers &cpu_registers();
+    n_e_s::core::IPpu::Registers &ppu_registers();
 
 private:
     n_e_s::core::IPpu::Registers ppu_registers_{};

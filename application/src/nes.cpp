@@ -55,6 +55,10 @@ n_e_s::core::IMmu &Nes::mmu() {
     return *mmu_;
 }
 
-n_e_s::core::ICpu::Registers &Nes::registers() {
+n_e_s::core::ICpu::Registers &Nes::cpu_registers() {
     return cpu_registers_;
+}
+
+n_e_s::core::IPpu::Registers &Nes::ppu_registers() {
+    return ppu_registers_;
 }

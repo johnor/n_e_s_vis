@@ -20,7 +20,7 @@ void NesWidget::draw() {
 
     if (ImGui::Button("Jump to address")) {
         nes_->reset();
-        nes_->registers().pc = jump_to_address_;
+        nes_->cpu_registers().pc = jump_to_address_;
     }
     ImGui::SameLine();
     ImGui::InputScalar("",
@@ -33,21 +33,23 @@ void NesWidget::draw() {
 
     ImGui::Text("Curr cycle: %lu", nes_->cycle());
 
-    ImGui::Text("%s: %04hx", "pc", nes_->registers().pc);
+    const auto reg = nes_->cpu_registers();
+
+    ImGui::Text("%s: %04hx", "pc", reg.pc);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "a", nes_->registers().a);
+    ImGui::Text("%s: %02hhx", "a", reg.a);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "x", nes_->registers().x);
+    ImGui::Text("%s: %02hhx", "x", reg.x);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "y", nes_->registers().y);
+    ImGui::Text("%s: %02hhx", "y", reg.y);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "p", nes_->registers().p);
+    ImGui::Text("%s: %02hhx", "p", reg.p);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "sp", nes_->registers().sp);
+    ImGui::Text("%s: %02hhx", "sp", reg.sp);
 
     ImGui::Spacing();
 
-    const uint16_t pc = nes_->registers().pc;
+    const uint16_t pc = reg.pc;
     ImGui::Text("Mem at PC: %02hhx %02hhx %02hhx",
             nes_->mmu().read_byte(pc),
             nes_->mmu().read_byte(pc + 1),
