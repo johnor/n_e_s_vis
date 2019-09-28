@@ -6,7 +6,7 @@
 CpuWidget::CpuWidget(Nes *nes) : nes_{nes} {}
 
 void CpuWidget::draw() {
-    ImGui::Begin("Nes");
+    ImGui::Begin("Nes cpu");
 
     if (ImGui::Button("Step")) {
         nes_->execute();

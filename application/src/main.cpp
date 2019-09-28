@@ -1,5 +1,6 @@
 #include "cpu_widget.h"
 #include "nes.h"
+#include "ppu_widget.h"
 #include "screen.h"
 
 #include "imgui-SFML.h"
@@ -45,6 +46,7 @@ int main(int argc, char **argv) {
     Screen screen(kNesWidth, kNesHeight, kPixelSize);
     Nes nes;
     CpuWidget cpu_widget(&nes);
+    PpuWidget ppu_widget(&nes);
 
     for (int i = 0; i < 250; ++i) {
         screen.set_pixel(i, i, 255, 0, 0);
@@ -83,6 +85,7 @@ int main(int argc, char **argv) {
 
             ImGui::ShowDemoWindow();
             cpu_widget.draw();
+            ppu_widget.draw();
             screen.draw(window);
 
             ImGui::SFML::Render(window);
