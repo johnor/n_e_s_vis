@@ -11,15 +11,16 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <cmath>
 
 namespace {
 
-constexpr int NES_WIDTH = 256;
-constexpr int NES_HEIGHT = 240;
-constexpr int PIXEL_SIZE = 4;
+constexpr int kNesWidth = 256;
+constexpr int kNesHeight = 240;
+constexpr int kPixelSize = 4;
 
-constexpr int WIN_WIDTH = NES_WIDTH * PIXEL_SIZE;
-constexpr int WIN_HEIGHT = NES_HEIGHT * PIXEL_SIZE;
+constexpr int kWinWidth = kNesWidth * kPixelSize;
+constexpr int kWinHeight = kNesHeight * kPixelSize;
 
 void poll_events(sf::RenderWindow &window) {
     sf::Event event;
@@ -36,12 +37,12 @@ void poll_events(sf::RenderWindow &window) {
 
 int main(int argc, char **argv) {
     sf::RenderWindow window(
-            sf::VideoMode(WIN_WIDTH, WIN_HEIGHT), "n_e_s visulization");
+            sf::VideoMode(kWinWidth, kWinHeight), "n_e_s visulization");
     window.setVerticalSyncEnabled(true);
 
     ImGui::SFML::Init(window);
 
-    Screen screen(NES_WIDTH, NES_HEIGHT, PIXEL_SIZE);
+    Screen screen(kNesWidth, kNesHeight, kPixelSize);
     Nes nes;
     NesWidget nes_widget(&nes);
 
@@ -55,7 +56,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < 240; ++i) {
         screen.set_pixel(250, i, 0, 0, 255);
     }
-    screen.set_pixel(NES_WIDTH - 1, NES_HEIGHT - 1, 0xFFFFFFFF);
+    screen.set_pixel(kNesWidth - 1, kNesHeight - 1, 0xFFFFFFFF);
 
     try {
         if (argc > 1) {
@@ -73,8 +74,8 @@ int main(int argc, char **argv) {
 
             if (ImGui::IsMouseDown(0)) {
                 auto pos = sf::Vector2f(ImGui::GetMousePos());
-                pos.x /= PIXEL_SIZE;
-                pos.y /= PIXEL_SIZE;
+                pos.x /= kPixelSize;
+                pos.y /= kPixelSize;
 
                 screen.set_pixel(
                         std::lround(pos.x), std::lround(pos.y), 0, 0, 255);
