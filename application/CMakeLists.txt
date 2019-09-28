@@ -6,6 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
     nes_core
     GIT_REPOSITORY https://github.com/evilcorpltd/n_e_s.git
+    GIT_TAG 8d442e5d2bb37da7dc6e022620fa3aae2d330ebb
 )
 
 FetchContent_GetProperties(nes_core)
