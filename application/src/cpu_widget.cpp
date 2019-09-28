@@ -1,11 +1,11 @@
-#include "nes_widget.h"
+#include "cpu_widget.h"
 
 #include "imgui-SFML.h"
 #include "imgui.h"
 
-NesWidget::NesWidget(Nes *nes) : nes_{nes} {}
+CpuWidget::CpuWidget(Nes *nes) : nes_{nes} {}
 
-void NesWidget::draw() {
+void CpuWidget::draw() {
     ImGui::Begin("Nes");
 
     if (ImGui::Button("Step")) {

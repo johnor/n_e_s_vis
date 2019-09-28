@@ -2,9 +2,9 @@
 
 #include "nes.h"
 
-class NesWidget {
+class CpuWidget {
 public:
-    explicit NesWidget(Nes *nes);
+    explicit CpuWidget(Nes *nes);
 
     void draw();
 

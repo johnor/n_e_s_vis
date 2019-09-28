@@ -19,8 +19,8 @@ add_executable(${PROJECT_NAME}
    src/main.cpp
    src/nes.cpp
    src/nes.h
-   src/nes_widget.h
-   src/nes_widget.cpp
+   src/cpu_widget.h
+   src/cpu_widget.cpp
    src/screen.h
    src/screen.cpp
 )

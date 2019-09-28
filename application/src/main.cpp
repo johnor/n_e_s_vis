@@ -1,5 +1,5 @@
+#include "cpu_widget.h"
 #include "nes.h"
-#include "nes_widget.h"
 #include "screen.h"
 
 #include "imgui-SFML.h"
@@ -9,9 +9,9 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
-#include <cmath>
 
 namespace {
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     Screen screen(kNesWidth, kNesHeight, kPixelSize);
     Nes nes;
-    NesWidget nes_widget(&nes);
+    CpuWidget cpu_widget(&nes);
 
     for (int i = 0; i < 250; ++i) {
         screen.set_pixel(i, i, 255, 0, 0);
@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
             }
 
             ImGui::ShowDemoWindow();
-            nes_widget.draw();
+            cpu_widget.draw();
             screen.draw(window);
 
             ImGui::SFML::Render(window);
