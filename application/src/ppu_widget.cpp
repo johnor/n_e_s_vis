@@ -19,12 +19,10 @@ void PpuWidget::draw() {
     ImGui::Text("%s: %02hhx", "status", reg.status);
 
     ImGui::Text("%s: %02hhx", "oamaddr", reg.oamaddr);
-    ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "mem(oamaddr)", try_get_ppu_mem(reg.oamaddr));
 
     ImGui::Text("%s: %02hhx", "scroll", reg.fine_x_scroll);
 
-    ImGui::Text("%s: %02hhx", "vram_addr", reg.vram_addr);
+    ImGui::Text("%s: %04hx", "vram_addr", reg.vram_addr);
     ImGui::SameLine();
     ImGui::Text("%s: %02hhx", "mem(vram_addr)", try_get_ppu_mem(reg.vram_addr));
 
