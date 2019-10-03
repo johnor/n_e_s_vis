@@ -1,5 +1,7 @@
 #include "cpu_widget.h"
 
+#include "core/opcode.h"
+
 #include "imgui-SFML.h"
 #include "imgui.h"
 
@@ -60,6 +62,9 @@ void CpuWidget::draw() {
             nes_->mmu().read_byte(pc),
             nes_->mmu().read_byte(pc + 1),
             nes_->mmu().read_byte(pc + 2));
+
+    const auto opcode = n_e_s::core::decode(nes_->mmu().read_byte(pc));
+    ImGui::Text("Instruction: %s", n_e_s::core::to_string(opcode.family).c_str());
 
     ImGui::End();
 }
