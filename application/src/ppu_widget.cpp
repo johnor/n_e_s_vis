@@ -5,6 +5,9 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+
 PpuWidget::PpuWidget(Nes *nes) : nes_{nes} {}
 
 void PpuWidget::draw() {
@@ -26,6 +29,44 @@ void PpuWidget::draw() {
     ImGui::SameLine();
     ImGui::Text("%s: %02hhx", "mem(vram_addr)", try_get_ppu_mem(reg.vram_addr));
 
+    if (ImGui::CollapsingHeader("Pattern tables")) {
+        if (ImGui::Button("Read data")) {
+            for (int i = 0; i < kPatternTableSize; ++i) {
+                pattern_table_textures_[i] = get_pattern_table(i * 16, 0);
+
+                sf::Sprite sprite(pattern_table_textures_[i]);
+                sprite.setScale(2.f, 2.f);
+
+                pattern_table_sprites_[i] = sprite;
+            }
+
+            for (int i = 0; i < kPatternTableSize; ++i) {
+                pattern_table_textures_[kPatternTableSize + i] =
+                        get_pattern_table(i * 16, 1);
+
+                sf::Sprite sprite(pattern_table_textures_[kPatternTableSize + i]);
+                sprite.setScale(2.f, 2.f);
+
+                pattern_table_sprites_[kPatternTableSize + i] = sprite;
+            }
+        }
+
+        ImGui::Text("Pattern table 0");
+        for (int i = 0; i < kPatternTableSize; ++i) {
+            if (i % 16 != 0) {
+                ImGui::SameLine();
+            }
+            ImGui::Image(pattern_table_sprites_[i]);
+        }
+        ImGui::Text("Pattern table 1");
+        for (int i = kPatternTableSize; i < kPatternTableSize * 2; ++i) {
+            if (i % 16 != 0) {
+                ImGui::SameLine();
+            }
+            ImGui::Image(pattern_table_sprites_[i]);
+        }
+    }
+
     ImGui::End();
 }
 
@@ -36,4 +77,40 @@ uint8_t PpuWidget::try_get_ppu_mem(const uint16_t addr) {
     } catch (const n_e_s::core::InvalidAddress &) {
     }
     return result;
+}
+
+sf::Texture PpuWidget::get_pattern_table(uint16_t pos, uint16_t pattern_table) {
+    sf::Image image;
+    image.create(8, 8, sf::Color(10, 100, 0));
+
+    for (uint8_t row = 0; row < 8; ++row) {
+        // Second pattern table starts at 0x1000
+        const uint16_t base_address = pattern_table * 0x1000 + pos + row;
+        const uint8_t a = nes_->ppu_mmu().read_byte(base_address);
+        const uint8_t b = nes_->ppu_mmu().read_byte(base_address + 8u);
+
+        for (uint8_t col = 0; col < 8u; ++col) {
+            // First column is the leftmost bit
+            const uint16_t mask = 1u << (7 - col);
+
+            const uint8_t color_index = !!(a & mask) + !!(b & mask);
+
+            sf::Color color = sf::Color::Black;
+            switch (color_index) {
+            case 1:
+                color = sf::Color::Color(84, 84, 84);
+                break;
+            case 2:
+                color = sf::Color::Color(0, 30, 116);
+                break;
+            case 3:
+                color = sf::Color::Color(8, 16, 144);
+                break;
+            }
+            image.setPixel(col, row, color);
+        }
+    }
+    sf::Texture texture;
+    texture.loadFromImage(image);
+    return texture;
 }
