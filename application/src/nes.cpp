@@ -6,8 +6,33 @@
 #include "core/ppu_factory.h"
 #include "core/rom_factory.h"
 
+namespace {
+
+class MemBankReference : public n_e_s::core::IMemBank {
+public:
+    MemBankReference(IMemBank *const membank) : membank_(membank) {}
+
+    bool is_address_in_range(uint16_t addr) const override {
+        return membank_->is_address_in_range(addr);
+    }
+
+    uint8_t read_byte(uint16_t addr) const override {
+        return membank_->read_byte(addr);
+    }
+    void write_byte(uint16_t addr, uint8_t byte) override {
+        membank_->write_byte(addr, byte);
+    }
+
+private:
+    IMemBank *membank_;
+};
+
+} // namespace
+
 Nes::Nes()
-        : ppu_(n_e_s::core::PpuFactory::create(&ppu_registers_)),
+        : ppu_mmu_(n_e_s::core::MmuFactory::create(
+                  n_e_s::core::MemBankFactory::create_nes_ppu_mem_banks())),
+            ppu_(n_e_s::core::PpuFactory::create(&ppu_registers_, ppu_mmu_.get())),
           mmu_(n_e_s::core::MmuFactory::create(
                   n_e_s::core::MemBankFactory::create_nes_mem_banks(
                           ppu_.get()))),
@@ -26,14 +51,22 @@ void Nes::reset() {
 }
 
 void Nes::load_rom(const std::string &filepath) {
-    n_e_s::core::MemBankList membanks{
-            n_e_s::core::MemBankFactory::create_nes_mem_banks(ppu_.get())};
-
     std::unique_ptr<n_e_s::core::IRom> rom{
             n_e_s::core::RomFactory::from_file(filepath)};
-    membanks.push_back(std::move(rom));
 
-    mmu_ = n_e_s::core::MmuFactory::create(std::move(membanks));
+    n_e_s::core::MemBankList ppu_membanks{
+            n_e_s::core::MemBankFactory::create_nes_ppu_mem_banks()};
+
+    ppu_membanks.push_back(std::make_unique<MemBankReference>(rom.get()));
+
+    ppu_mmu_ = n_e_s::core::MmuFactory::create(std::move(ppu_membanks));
+    ppu_ = n_e_s::core::PpuFactory::create(&ppu_registers_, ppu_mmu_.get());
+
+    n_e_s::core::MemBankList cpu_membanks{
+            n_e_s::core::MemBankFactory::create_nes_mem_banks(ppu_.get())};
+    cpu_membanks.push_back(std::move(rom));
+
+    mmu_ = n_e_s::core::MmuFactory::create(std::move(cpu_membanks));
     cpu_ = n_e_s::core::CpuFactory::create(&cpu_registers_, mmu_.get());
 
     reset();
@@ -53,6 +86,10 @@ n_e_s::core::IPpu &Nes::ppu() {
 
 n_e_s::core::IMmu &Nes::mmu() {
     return *mmu_;
+}
+
+n_e_s::core::IMmu &Nes::ppu_mmu() {
+    return *ppu_mmu_;
 }
 
 n_e_s::core::ICpu::Registers &Nes::cpu_registers() {
