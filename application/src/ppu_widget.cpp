@@ -101,13 +101,13 @@ sf::Texture PpuWidget::get_pattern_table(uint16_t pos, uint16_t pattern_table) {
             sf::Color color = sf::Color::Black;
             switch (color_index) {
             case 1:
-                color = sf::Color::Color(84, 84, 84);
+                color = sf::Color(84, 84, 84);
                 break;
             case 2:
-                color = sf::Color::Color(0, 30, 116);
+                color = sf::Color(0, 30, 116);
                 break;
             case 3:
-                color = sf::Color::Color(8, 16, 144);
+                color = sf::Color(8, 16, 144);
                 break;
             }
             image.setPixel(col, row, color);
