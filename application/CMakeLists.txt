@@ -8,12 +8,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/evilcorpltd/n_e_s.git
     GIT_TAG 08b7877c199e4d9b197f233245a29f3d83e1e99a
 )
-
-FetchContent_GetProperties(nes_core)
-if(NOT nes_core_POPULATED)
-    FetchContent_Populate(nes_core)
-    add_subdirectory(${nes_core_SOURCE_DIR} ${nes_core_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
+FetchContent_MakeAvailable(nes_core)
 
 add_executable(${PROJECT_NAME}
    src/main.cpp
