@@ -1,11 +1,14 @@
 #include "cpu_widget.h"
 
 #include "core/opcode.h"
+#include "core/icpu.h"
+#include "core/immu.h"
+#include "nes/nes.h"
 
 #include "imgui-SFML.h"
 #include "imgui.h"
 
-CpuWidget::CpuWidget(Nes *nes) : nes_{nes} {}
+CpuWidget::CpuWidget(n_e_s::nes::Nes *nes) : nes_{nes} {}
 
 void CpuWidget::draw() {
     ImGui::Begin("Nes cpu");
@@ -39,7 +42,7 @@ void CpuWidget::draw() {
             "%04hx",
             ImGuiInputTextFlags_CharsHexadecimal);
 
-    ImGui::Text("Curr cycle: %lu", nes_->cycle());
+    ImGui::Text("Curr cycle: %lu", nes_->current_cycle());
 
     const auto reg = nes_->cpu_registers();
 

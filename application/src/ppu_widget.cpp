@@ -1,6 +1,9 @@
 #include "ppu_widget.h"
 
 #include "core/invalid_address.h"
+#include "core/immu.h"
+#include "core/ippu.h"
+#include "nes/nes.h"
 
 #include "imgui-SFML.h"
 #include "imgui.h"
@@ -8,7 +11,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-PpuWidget::PpuWidget(Nes *nes) : nes_{nes} {}
+PpuWidget::PpuWidget(n_e_s::nes::Nes *nes) : nes_{nes} {}
 
 void PpuWidget::draw() {
     ImGui::Begin("Nes ppu");

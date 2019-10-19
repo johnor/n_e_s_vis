@@ -1,14 +1,18 @@
 #pragma once
 
-#include "nes.h"
+#include <cstdint>
+
+namespace n_e_s::nes {
+class Nes;
+} // namespace n_e_s::nes
 
 class CpuWidget {
 public:
-    explicit CpuWidget(Nes *nes);
+    explicit CpuWidget(n_e_s::nes::Nes *nes);
 
     void draw();
 
 private:
     uint16_t jump_to_address_{0u};
-    Nes *nes_{nullptr};
+    n_e_s::nes::Nes *nes_{nullptr};
 };

@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
     nes_core
     GIT_REPOSITORY https://github.com/evilcorpltd/n_e_s.git
-    GIT_TAG 1cb3f59149db089b69bf650a6d7f18dcbc2ed5ae
+    GIT_TAG 08b7877c199e4d9b197f233245a29f3d83e1e99a
 )
 
 FetchContent_GetProperties(nes_core)
@@ -17,8 +17,6 @@ endif()
 
 add_executable(${PROJECT_NAME}
    src/main.cpp
-   src/nes.cpp
-   src/nes.h
    src/cpu_widget.h
    src/cpu_widget.cpp
    src/ppu_widget.h
@@ -30,6 +28,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         n_e_s_core
+        n_e_s_nes
         sfml-window
         sfml-system
         sfml-graphics
