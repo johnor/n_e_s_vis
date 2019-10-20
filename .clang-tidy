@@ -6,6 +6,7 @@ Checks: '
   clang-diagnostic-*,
   google-*,
   -google-build-using-namespace,
+  -google-runtime-references,
   misc-*,
   modernize-*,
   performance-*,
