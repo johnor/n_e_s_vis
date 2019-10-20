@@ -1,7 +1,7 @@
 #include "ppu_widget.h"
 
-#include "core/invalid_address.h"
 #include "core/immu.h"
+#include "core/invalid_address.h"
 #include "core/ippu.h"
 #include "nes/nes.h"
 
@@ -47,7 +47,8 @@ void PpuWidget::draw() {
                 pattern_table_textures_[kPatternTableSize + i] =
                         get_pattern_table(i * 16, 1);
 
-                sf::Sprite sprite(pattern_table_textures_[kPatternTableSize + i]);
+                sf::Sprite sprite(
+                        pattern_table_textures_[kPatternTableSize + i]);
                 sprite.setScale(2.f, 2.f);
 
                 pattern_table_sprites_[kPatternTableSize + i] = sprite;
