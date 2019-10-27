@@ -1,6 +1,6 @@
 #include "cpu_widget.h"
 
-#include "core/icpu.h"
+#include "core/imos6502.h"
 #include "core/immu.h"
 #include "core/opcode.h"
 #include "nes/nes.h"
