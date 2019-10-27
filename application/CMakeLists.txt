@@ -11,13 +11,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nes_core)
 
 add_executable(${PROJECT_NAME}
-   src/main.cpp
-   src/cpu_widget.h
    src/cpu_widget.cpp
-   src/ppu_widget.h
+   src/cpu_widget.h
+   src/log_widget.cpp
+   src/log_widget.h
+   src/main.cpp
    src/ppu_widget.cpp
-   src/screen.h
+   src/ppu_widget.h
    src/screen.cpp
+   src/screen.h
 )
 
 target_link_libraries(${PROJECT_NAME}

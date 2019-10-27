@@ -1,4 +1,5 @@
 #include "cpu_widget.h"
+#include "log_widget.h"
 #include "ppu_widget.h"
 #include "screen.h"
 
@@ -46,6 +47,7 @@ int main(int argc, char **argv) {
 
     Screen screen(kNesWidth, kNesHeight, kPixelSize);
     n_e_s::nes::Nes nes;
+    nesvis::LogWidget log;
     CpuWidget cpu_widget(&nes);
     PpuWidget ppu_widget(&nes);
 
@@ -63,6 +65,7 @@ int main(int argc, char **argv) {
 
     try {
         if (argc > 1) {
+            log.add("Loading rom from: " + std::string(argv[1]));
             nes.load_rom(argv[1]);
         }
 
@@ -87,6 +90,7 @@ int main(int argc, char **argv) {
             ImGui::ShowDemoWindow();
             cpu_widget.draw();
             ppu_widget.draw();
+            log.draw();
             screen.draw(window);
 
             ImGui::SFML::Render(window);
