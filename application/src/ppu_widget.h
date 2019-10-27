@@ -9,6 +9,8 @@ namespace n_e_s::nes {
 class Nes;
 } // namespace n_e_s::nes
 
+namespace nesvis {
+
 class PpuWidget {
 public:
     explicit PpuWidget(n_e_s::nes::Nes *nes);
@@ -25,3 +27,5 @@ private:
     std::array<sf::Texture, kPatternTableSize * 2> pattern_table_textures_;
     std::array<sf::Sprite, kPatternTableSize * 2> pattern_table_sprites_;
 };
+
+} // namespace nesvis

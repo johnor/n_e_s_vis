@@ -5,6 +5,8 @@
 
 #include <cstdint>
 
+namespace nesvis {
+
 class Screen {
 public:
     Screen(unsigned int width, unsigned int height, unsigned int pixel_size);
@@ -24,3 +26,5 @@ private:
 
     sf::Image image_;
 };
+
+} // namespace nesvis

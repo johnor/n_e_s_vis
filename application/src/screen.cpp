@@ -3,6 +3,8 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+namespace nesvis {
+
 Screen::Screen(unsigned int width, unsigned int height, unsigned int pixel_size)
         : pixel_size_(pixel_size), image_() {
     image_.create(
@@ -47,3 +49,5 @@ void Screen::draw(sf::RenderWindow &window) {
 
     window.draw(sprite);
 }
+
+} // namespace nesvis

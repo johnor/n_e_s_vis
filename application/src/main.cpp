@@ -45,11 +45,11 @@ int main(int argc, char **argv) {
 
     ImGui::SFML::Init(window);
 
-    Screen screen(kNesWidth, kNesHeight, kPixelSize);
+    nesvis::Screen screen(kNesWidth, kNesHeight, kPixelSize);
     n_e_s::nes::Nes nes;
     nesvis::LogWidget log;
-    CpuWidget cpu_widget(&nes);
-    PpuWidget ppu_widget(&nes);
+    nesvis::CpuWidget cpu_widget(&nes);
+    nesvis::PpuWidget ppu_widget(&nes);
 
     for (int i = 0; i < 250; ++i) {
         screen.set_pixel(i, i, 255, 0, 0);

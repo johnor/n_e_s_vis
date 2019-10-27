@@ -8,6 +8,8 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
+namespace nesvis {
+
 CpuWidget::CpuWidget(n_e_s::nes::Nes *nes) : nes_{nes} {}
 
 void CpuWidget::draw() {
@@ -72,3 +74,5 @@ void CpuWidget::draw() {
 
     ImGui::End();
 }
+
+} // namespace nesvis

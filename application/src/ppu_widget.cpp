@@ -11,6 +11,8 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+namespace nesvis {
+
 PpuWidget::PpuWidget(n_e_s::nes::Nes *nes) : nes_{nes} {}
 
 void PpuWidget::draw() {
@@ -118,3 +120,5 @@ sf::Texture PpuWidget::get_pattern_table(uint16_t pos, uint16_t pattern_table) {
     texture.loadFromImage(image);
     return texture;
 }
+
+} // namespace nesvis
