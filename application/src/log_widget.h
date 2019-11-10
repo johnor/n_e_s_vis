@@ -7,7 +7,7 @@ namespace nesvis {
 
 class LogWidget {
 public:
-    explicit LogWidget();
+    LogWidget() = default;
 
     void draw();
 

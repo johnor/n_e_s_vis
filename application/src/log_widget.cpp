@@ -5,8 +5,6 @@
 
 namespace nesvis {
 
-LogWidget::LogWidget() {}
-
 void LogWidget::draw() {
     ImGui::Begin("Log");
 
