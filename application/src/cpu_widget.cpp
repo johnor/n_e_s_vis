@@ -44,6 +44,10 @@ void CpuWidget::draw() {
             "%04hx",
             ImGuiInputTextFlags_CharsHexadecimal);
 
+    if (ImGui::Button("Reset")) {
+       nes_->reset();
+    }
+
     ImGui::Text("Curr cycle: %lu", nes_->current_cycle());
 
     const auto reg = nes_->cpu_registers();
