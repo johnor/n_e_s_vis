@@ -62,13 +62,13 @@ void CpuWidget::draw() {
 
     ImGui::Spacing();
 
-    const uint16_t pc = reg.pc;
+    const uint16_t pc_start = nes_->cpu().state().start_pc;
     ImGui::Text("Mem at PC: %02hhx %02hhx %02hhx",
-            nes_->mmu().read_byte(pc),
-            nes_->mmu().read_byte(pc + 1),
-            nes_->mmu().read_byte(pc + 2));
+            nes_->mmu().read_byte(pc_start),
+            nes_->mmu().read_byte(pc_start + 1),
+            nes_->mmu().read_byte(pc_start + 2));
 
-    const auto opcode = n_e_s::core::decode(nes_->mmu().read_byte(pc));
+    const auto opcode = n_e_s::core::decode(nes_->mmu().read_byte(pc_start));
     ImGui::Text(
             "Instruction: %s", n_e_s::core::to_string(opcode.family).c_str());
 
