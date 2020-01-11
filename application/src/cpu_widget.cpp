@@ -76,6 +76,11 @@ void CpuWidget::draw() {
     ImGui::Text(
             "Instruction: %s", n_e_s::core::to_string(opcode.family).c_str());
 
+    ImGui::Text("Stack contents:");
+    for (int i = reg.sp + 1; i <= 0xFF; ++i) {
+        ImGui::Text("%02hhX: %02hhX", i, nes_->mmu().read_byte(0x0100 + i));
+    }
+
     ImGui::End();
 }
 
