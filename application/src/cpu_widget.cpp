@@ -52,22 +52,22 @@ void CpuWidget::draw() {
 
     const auto reg = nes_->cpu_registers();
 
-    ImGui::Text("%s: %04hx", "pc", reg.pc);
+    ImGui::Text("%s: %04hX", "pc", reg.pc);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "a", reg.a);
+    ImGui::Text("%s: %02hhX", "a", reg.a);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "x", reg.x);
+    ImGui::Text("%s: %02hhX", "x", reg.x);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "y", reg.y);
+    ImGui::Text("%s: %02hhX", "y", reg.y);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "p", reg.p);
+    ImGui::Text("%s: %02hhX", "p", reg.p);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhx", "sp", reg.sp);
+    ImGui::Text("%s: %02hhX", "sp", reg.sp);
 
     ImGui::Spacing();
 
     const uint16_t pc_start = nes_->cpu().state().start_pc;
-    ImGui::Text("Mem at PC: %02hhx %02hhx %02hhx",
+    ImGui::Text("Mem at PC: %02hhX %02hhX %02hhX",
             nes_->mmu().read_byte(pc_start),
             nes_->mmu().read_byte(pc_start + 1),
             nes_->mmu().read_byte(pc_start + 2));
