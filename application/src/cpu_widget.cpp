@@ -45,7 +45,7 @@ void CpuWidget::draw() {
             ImGuiInputTextFlags_CharsHexadecimal);
 
     if (ImGui::Button("Reset")) {
-       nes_->reset();
+        nes_->reset();
     }
 
     ImGui::Text("Curr cycle: %lu", nes_->current_cycle());
@@ -78,7 +78,7 @@ void CpuWidget::draw() {
 
     ImGui::Text("Stack contents:");
     for (int i = reg.sp + 1; i <= 0xFF; ++i) {
-        ImGui::Text("%02hhX: %02hhX", i, nes_->mmu().read_byte(0x0100 + i));
+        ImGui::Text("%02X: %02hhX", i, nes_->mmu().read_byte(0x0100 + i));
     }
 
     ImGui::End();
