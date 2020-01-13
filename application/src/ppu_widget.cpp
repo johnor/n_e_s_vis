@@ -73,6 +73,28 @@ void PpuWidget::draw() {
         }
     }
 
+    if (ImGui::CollapsingHeader("Nametables")) {
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+        for (uint16_t y = 0; y < 30; ++y) {
+            for (uint16_t x = 0; x < 32; ++x) {
+                const uint16_t address = 0x2000 + y * 32 + x;
+                const uint8_t tile_index = nes_->ppu_mmu().read_byte(address);
+
+                if (x != 0) {
+                    ImGui::SameLine();
+                }
+                ImGui::Image(pattern_table_sprites_[tile_index]);
+                if (ImGui::IsItemHovered()) {
+                    ImGui::BeginTooltip();
+                    ImGui::Text("Address: %04hX", address);
+                    ImGui::Text("Tile index: %02hhX", tile_index);
+                    ImGui::EndTooltip();
+                }
+            }
+        }
+        ImGui::PopStyleVar(1);
+    }
+
     ImGui::End();
 }
 
