@@ -74,20 +74,24 @@ void PpuWidget::draw() {
     }
 
     if (ImGui::CollapsingHeader("Nametables")) {
+        const int pattern_table = reg.ctrl & 0x10 ? 1 : 0;
+        ImGui::Text("%s: %i", "Pattern table used: ", pattern_table);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         for (uint16_t y = 0; y < 30; ++y) {
             for (uint16_t x = 0; x < 32; ++x) {
                 const uint16_t address = 0x2000 + y * 32 + x;
                 const uint8_t tile_index = nes_->ppu_mmu().read_byte(address);
+                const int modified_tile_index = tile_index + kPatternTableSize * pattern_table;
 
                 if (x != 0) {
                     ImGui::SameLine();
                 }
-                ImGui::Image(pattern_table_sprites_[tile_index]);
+                ImGui::Image(pattern_table_sprites_[modified_tile_index]);
                 if (ImGui::IsItemHovered()) {
                     ImGui::BeginTooltip();
                     ImGui::Text("Address: %04hX", address);
                     ImGui::Text("Tile index: %02hhX", tile_index);
+                    ImGui::Text("Tile index mod: %04hhX", modified_tile_index);
                     ImGui::EndTooltip();
                 }
             }
