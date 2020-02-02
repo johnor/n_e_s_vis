@@ -6,6 +6,7 @@
 #include "nes/nes.h"
 #include "ppu_helper.h"
 
+#include "imconfig-SFML.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
 
@@ -18,7 +19,7 @@ PpuWidget::PpuWidget(n_e_s::nes::Nes *nes, PpuHelper *ppu_helper)
         : nes_{nes}, ppu_helper_{ppu_helper} {}
 
 void PpuWidget::load_pattern_tables() {
-    const uint16_t palette = 1; // TODO(jn) update to correct index
+    const uint16_t palette = 0; // TODO(jn) update to correct index
     for (int i = 0; i < kPatternTableSize; ++i) {
         pattern_table_textures_[i] =
                 ppu_helper_->get_pattern_table_texture(i * 16, 0, palette);
@@ -76,6 +77,11 @@ void PpuWidget::draw() {
                 ImGui::SameLine();
             }
             ImGui::Image(pattern_table_sprites_[i]);
+            if (ImGui::IsItemHovered()) {
+                ImGui::BeginTooltip();
+                ImGui::Text("Index: %02hX", i);
+                ImGui::EndTooltip();
+            }
         }
         ImGui::Text("Pattern table 1");
         for (int i = kPatternTableSize; i < kPatternTableSize * 2; ++i) {
@@ -83,6 +89,11 @@ void PpuWidget::draw() {
                 ImGui::SameLine();
             }
             ImGui::Image(pattern_table_sprites_[i]);
+            if (ImGui::IsItemHovered()) {
+                ImGui::BeginTooltip();
+                ImGui::Text("Index: %02hX", i - kPatternTableSize);
+                ImGui::EndTooltip();
+            }
         }
     }
 
@@ -92,8 +103,7 @@ void PpuWidget::draw() {
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         for (uint16_t y = 0; y < 30; ++y) {
             for (uint16_t x = 0; x < 32; ++x) {
-                const auto cell_data =
-                        ppu_helper_->get_cell_data_from_nametable(x, y);
+                const auto cell_data = ppu_helper_->get_nametable_cell(x, y);
                 const int modified_tile_index =
                         cell_data.tile_index +
                         kPatternTableSize * pattern_table;
@@ -114,7 +124,64 @@ void PpuWidget::draw() {
         ImGui::PopStyleVar(1);
     }
 
-    ImGui::End();
+    ImGui::Text("Palette");
+
+    ImGui::Text("Background palette");
+    ImGui::PushID("background palette");
+
+    const std::array<std::string, 8> palette_text = {"Background 0",
+            "Background 1",
+            "Background 2",
+            "Background 3",
+            "Sprite 0",
+            "Sprite 1",
+            "Sprite 2",
+            "Sprite 3"};
+    int text_index = 0;
+
+    for (uint16_t address = 0x3F00; address < 0x3F20; ++address) {
+        const uint8_t palette_index = nes_->ppu().read_byte(address);
+        ImGui::PushID(palette_index);
+        if ((address % 4) == 0) {
+            ImGui::Text("%s", palette_text[text_index++].c_str());
+            ImGui::SameLine(100);
+        }
+        if ((address % 4) != 0) {
+            ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+        }
+        const ImVec4 color = ppu_helper_->get_color_from_index(palette_index);
+        ImGui::ColorButton("##backgroundpalette",
+                color,
+                ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoTooltip,
+                ImVec2(20, 20));
+        if (ImGui::IsItemHovered()) {
+            ImGui::BeginTooltip();
+            ImGui::Text("Address: %04hX", address);
+            ImGui::Text("index: %02hhX", palette_index);
+            ImGui::EndTooltip();
+        }
+
+        ImGui::PopID();
+    }
+    ImGui::PopID(); // background palette
+
+    ImGui::PushID("palette");
+    for (int n = 0; n < ppu_helper_->kPaletteSize; n++) {
+        ImGui::PushID(n);
+        if ((n % 16) != 0) {
+            ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+        }
+        const ImVec4 color = ppu_helper_->get_color_from_index(n);
+        ImGui::ColorButton("##palette",
+                color,
+                ImGuiColorEditFlags_NoPicker,
+                ImVec2(20, 20));
+
+        ImGui::PopID();
+    }
+    ImGui::PopID(); // palette
+
+    ImGui::End(); // window
 }
 
 uint8_t PpuWidget::try_get_ppu_mem(const uint16_t addr) {

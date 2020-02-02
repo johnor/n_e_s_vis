@@ -10,7 +10,7 @@ namespace nesvis {
 
 class PpuHelper {
 public:
-    struct CellData {
+    struct NametableCell {
         uint16_t tile_index;
         uint16_t address;
     };
@@ -21,9 +21,12 @@ public:
             uint16_t pattern_table,
             uint16_t palette);
 
-    PpuHelper::CellData get_cell_data_from_nametable(int x, int y);
+    PpuHelper::NametableCell get_nametable_cell(int x, int y);
 
-    sf::Color get_color_from_index(uint16_t palette, uint16_t index);
+    sf::Color get_color_from_index(uint16_t index);
+    sf::Color get_background_color(uint16_t color_set, uint16_t index);
+
+    static constexpr int kPaletteSize = 64;
 
 private:
     n_e_s::nes::Nes *nes_{nullptr};

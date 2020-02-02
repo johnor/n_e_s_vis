@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
     sf::RenderWindow window(
             sf::VideoMode(kWinWidth, kWinHeight), "n_e_s visulization");
     window.setVerticalSyncEnabled(true);
+    window.setFramerateLimit(60);
 
     ImGui::SFML::Init(window);
 
