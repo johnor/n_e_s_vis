@@ -124,8 +124,7 @@ sf::Texture PpuWidget::get_pattern_table(uint16_t pos, uint16_t pattern_table) {
 
         for (uint8_t col = 0; col < 8u; ++col) {
             // First column is the leftmost bit
-            const uint16_t mask = 1u << (7 - col);
-
+            const uint16_t mask = 1u << (7u - col);
             const uint8_t color_index = !!(a & mask) + !!(b & mask);
 
             sf::Color color = sf::Color::Black;
