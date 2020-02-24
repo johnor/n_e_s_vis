@@ -74,7 +74,7 @@ void PpuWidget::draw() {
     }
 
     if (ImGui::CollapsingHeader("Nametables")) {
-        const int pattern_table = reg.ctrl & 0x10 ? 1 : 0;
+        const int pattern_table = reg.ctrl & 0x10u ? 1 : 0;
         ImGui::Text("%s: %i", "Pattern table used: ", pattern_table);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         for (uint16_t y = 0; y < 30; ++y) {
@@ -92,7 +92,7 @@ void PpuWidget::draw() {
                     ImGui::BeginTooltip();
                     ImGui::Text("Address: %04hX", address);
                     ImGui::Text("Tile index: %02hhX", tile_index);
-                    ImGui::Text("Tile index mod: %04hhX", modified_tile_index);
+                    ImGui::Text("Tile index mod: %04X", modified_tile_index);
                     ImGui::EndTooltip();
                 }
             }
