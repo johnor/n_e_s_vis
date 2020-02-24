@@ -81,7 +81,8 @@ void PpuWidget::draw() {
             for (uint16_t x = 0; x < 32; ++x) {
                 const uint16_t address = 0x2000 + y * 32 + x;
                 const uint8_t tile_index = nes_->ppu_mmu().read_byte(address);
-                const int modified_tile_index = tile_index + kPatternTableSize * pattern_table;
+                const int modified_tile_index =
+                        tile_index + kPatternTableSize * pattern_table;
 
                 if (x != 0) {
                     ImGui::SameLine();
