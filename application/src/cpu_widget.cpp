@@ -48,7 +48,7 @@ void CpuWidget::draw() {
         nes_->reset();
     }
 
-    ImGui::Text("Curr cycle: %lu", nes_->current_cycle());
+    ImGui::Text("Curr cycle: %llu", nes_->current_cycle());
 
     const auto reg = nes_->cpu_registers();
 
