@@ -5,6 +5,13 @@ addons:
   apt:
     packages: &common-apt-packages
       - python3-pip
+      # sfml dependencies
+      - libxrandr-dev
+      - libudev-dev
+      - libopenal-dev
+      - libflac-dev
+      - libvorbis-dev
+      - libgl1-mesa-dev
 
 matrix:
   include:
@@ -20,13 +27,6 @@ matrix:
             - clang-9
             - clang-tidy-9
             - libstdc++-8-dev
-            # sfml dependencies
-            - libxrandr-dev
-            - libudev-dev
-            - libopenal-dev
-            - libflac-dev
-            - libvorbis-dev
-            - libgl1-mesa-dev
       script:
         - CXX=clang++-9 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
         - travis_wait run-clang-tidy-9.py -q -p . "application" -header-filter=".*/application/.*"
@@ -43,26 +43,15 @@ matrix:
         - find application -name *.h -o -name *.cpp | xargs clang-format -style=file -i
         - git diff --exit-code
 
-    - name: "gcc 7"
-      addons: &gcc7
+    - name: "gcc 9"
+      addons: &gcc9
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
           packages:
             - *common-apt-packages
-            - g++-7
-            # sfml dependencies
-            - libxrandr-dev
-            - libudev-dev
-            - libopenal-dev
-            - libflac-dev
-            - libvorbis-dev
-            - libgl1-mesa-dev
-      env: MATRIX_EVAL="CXX=g++-7 BUILD_TYPE=Debug"
-
-    - name: "gcc 7 release"
-      addons: *gcc7
-      env: MATRIX_EVAL="CXX=g++-7 BUILD_TYPE=Release"
+            - g++-9
+      env: MATRIX_EVAL="CXX=g++-9 BUILD_TYPE=Debug"
 
 install:
   - python3 -m pip install pip --upgrade
