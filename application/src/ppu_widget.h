@@ -11,17 +11,22 @@ class Nes;
 
 namespace nesvis {
 
+class PpuHelper;
+
 class PpuWidget {
 public:
-    explicit PpuWidget(n_e_s::nes::Nes *nes);
+    PpuWidget(n_e_s::nes::Nes *nes, PpuHelper *ppu_helper);
+
+    void load_pattern_tables();
+    sf::Sprite get_pattern_table_sprite(const int tile_index,
+            const int pattern_table);
 
     void draw();
 
 private:
     uint8_t try_get_ppu_mem(const uint16_t addr);
     n_e_s::nes::Nes *nes_{nullptr};
-
-    sf::Texture get_pattern_table(uint16_t pos, uint16_t pattern_table);
+    PpuHelper *ppu_helper_{nullptr};
 
     static constexpr int kPatternTableSize{256};
     std::array<sf::Texture, kPatternTableSize * 2> pattern_table_textures_;

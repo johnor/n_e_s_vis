@@ -1,5 +1,6 @@
 #include "cpu_widget.h"
 #include "log_widget.h"
+#include "ppu_helper.h"
 #include "ppu_widget.h"
 #include "screen.h"
 
@@ -47,9 +48,10 @@ int main(int argc, char **argv) {
 
     nesvis::Screen screen(kNesWidth, kNesHeight, kPixelSize);
     n_e_s::nes::Nes nes;
+    nesvis::PpuHelper ppu_helper(&nes);
     nesvis::LogWidget log;
     nesvis::CpuWidget cpu_widget(&nes);
-    nesvis::PpuWidget ppu_widget(&nes);
+    nesvis::PpuWidget ppu_widget(&nes, &ppu_helper);
 
     for (int i = 0; i < 250; ++i) {
         screen.set_pixel(i, i, 255, 0, 0);
@@ -68,6 +70,8 @@ int main(int argc, char **argv) {
             log.add("Loading rom from: " + std::string(argv[1]));
             nes.load_rom(argv[1]);
         }
+
+        ppu_widget.load_pattern_tables();
 
         sf::Clock delta_clock;
         while (window.isOpen()) {
@@ -94,7 +98,6 @@ int main(int argc, char **argv) {
             screen.draw(window);
 
             ImGui::SFML::Render(window);
-
             window.display();
         }
 

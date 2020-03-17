@@ -16,6 +16,8 @@ add_executable(${PROJECT_NAME}
    src/log_widget.cpp
    src/log_widget.h
    src/main.cpp
+   src/ppu_helper.cpp
+   src/ppu_helper.h
    src/ppu_widget.cpp
    src/ppu_widget.h
    src/screen.cpp
@@ -34,7 +36,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_compile_features(${PROJECT_NAME}
     PRIVATE
-        cxx_std_17
+        cxx_std_20
 )
 
 target_include_directories(${PROJECT_NAME}

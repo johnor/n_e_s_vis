@@ -4,6 +4,7 @@
 #include "core/invalid_address.h"
 #include "core/ippu.h"
 #include "nes/nes.h"
+#include "ppu_helper.h"
 
 #include "imgui-SFML.h"
 #include "imgui.h"
@@ -13,7 +14,37 @@
 
 namespace nesvis {
 
-PpuWidget::PpuWidget(n_e_s::nes::Nes *nes) : nes_{nes} {}
+PpuWidget::PpuWidget(n_e_s::nes::Nes *nes, PpuHelper *ppu_helper)
+        : nes_{nes}, ppu_helper_{ppu_helper} {}
+
+void PpuWidget::load_pattern_tables() {
+    const uint16_t palette = 1; // TODO(jn) update to correct index
+    for (int i = 0; i < kPatternTableSize; ++i) {
+        pattern_table_textures_[i] =
+                ppu_helper_->get_pattern_table_texture(i * 16, 0, palette);
+
+        sf::Sprite sprite(pattern_table_textures_[i]);
+        sprite.setScale(2.f, 2.f);
+
+        pattern_table_sprites_[i] = sprite;
+    }
+
+    for (int i = 0; i < kPatternTableSize; ++i) {
+        pattern_table_textures_[kPatternTableSize + i] =
+                ppu_helper_->get_pattern_table_texture(i * 16, 1, palette);
+
+        sf::Sprite sprite(pattern_table_textures_[kPatternTableSize + i]);
+        sprite.setScale(2.f, 2.f);
+
+        pattern_table_sprites_[kPatternTableSize + i] = sprite;
+    }
+}
+
+sf::Sprite PpuWidget::get_pattern_table_sprite(const int tile_index,
+        const int pattern_table) {
+    const int modified_index = tile_index + kPatternTableSize * pattern_table;
+    return pattern_table_sprites_[modified_index];
+}
 
 void PpuWidget::draw() {
     ImGui::Begin("Nes ppu");
@@ -36,25 +67,7 @@ void PpuWidget::draw() {
 
     if (ImGui::CollapsingHeader("Pattern tables")) {
         if (ImGui::Button("Read data")) {
-            for (int i = 0; i < kPatternTableSize; ++i) {
-                pattern_table_textures_[i] = get_pattern_table(i * 16, 0);
-
-                sf::Sprite sprite(pattern_table_textures_[i]);
-                sprite.setScale(2.f, 2.f);
-
-                pattern_table_sprites_[i] = sprite;
-            }
-
-            for (int i = 0; i < kPatternTableSize; ++i) {
-                pattern_table_textures_[kPatternTableSize + i] =
-                        get_pattern_table(i * 16, 1);
-
-                sf::Sprite sprite(
-                        pattern_table_textures_[kPatternTableSize + i]);
-                sprite.setScale(2.f, 2.f);
-
-                pattern_table_sprites_[kPatternTableSize + i] = sprite;
-            }
+            load_pattern_tables();
         }
 
         ImGui::Text("Pattern table 0");
@@ -79,10 +92,11 @@ void PpuWidget::draw() {
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         for (uint16_t y = 0; y < 30; ++y) {
             for (uint16_t x = 0; x < 32; ++x) {
-                const uint16_t address = 0x2000 + y * 32 + x;
-                const uint8_t tile_index = nes_->ppu_mmu().read_byte(address);
+                const auto cell_data =
+                        ppu_helper_->get_cell_data_from_nametable(x, y);
                 const int modified_tile_index =
-                        tile_index + kPatternTableSize * pattern_table;
+                        cell_data.tile_index +
+                        kPatternTableSize * pattern_table;
 
                 if (x != 0) {
                     ImGui::SameLine();
@@ -90,8 +104,8 @@ void PpuWidget::draw() {
                 ImGui::Image(pattern_table_sprites_[modified_tile_index]);
                 if (ImGui::IsItemHovered()) {
                     ImGui::BeginTooltip();
-                    ImGui::Text("Address: %04hX", address);
-                    ImGui::Text("Tile index: %02hhX", tile_index);
+                    ImGui::Text("Address: %04hX", cell_data.address);
+                    ImGui::Text("Tile index: %02hX", cell_data.tile_index);
                     ImGui::Text("Tile index mod: %04X", modified_tile_index);
                     ImGui::EndTooltip();
                 }
@@ -110,41 +124,6 @@ uint8_t PpuWidget::try_get_ppu_mem(const uint16_t addr) {
     } catch (const n_e_s::core::InvalidAddress &) {
     }
     return result;
-}
-
-sf::Texture PpuWidget::get_pattern_table(uint16_t pos, uint16_t pattern_table) {
-    sf::Image image;
-    image.create(8, 8, sf::Color(10, 100, 0));
-
-    for (uint8_t row = 0; row < 8; ++row) {
-        // Second pattern table starts at 0x1000
-        const uint16_t base_address = pattern_table * 0x1000 + pos + row;
-        const uint8_t a = nes_->ppu_mmu().read_byte(base_address);
-        const uint8_t b = nes_->ppu_mmu().read_byte(base_address + 8u);
-
-        for (uint8_t col = 0; col < 8u; ++col) {
-            // First column is the leftmost bit
-            const uint16_t mask = 1u << (7u - col);
-            const uint8_t color_index = !!(a & mask) + !!(b & mask);
-
-            sf::Color color = sf::Color::Black;
-            switch (color_index) {
-            case 1:
-                color = sf::Color(84, 84, 84);
-                break;
-            case 2:
-                color = sf::Color(0, 30, 116);
-                break;
-            case 3:
-                color = sf::Color(8, 16, 144);
-                break;
-            }
-            image.setPixel(col, row, color);
-        }
-    }
-    sf::Texture texture;
-    texture.loadFromImage(image);
-    return texture;
 }
 
 } // namespace nesvis
