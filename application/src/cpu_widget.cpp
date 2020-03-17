@@ -8,6 +8,8 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
+#include <cinttypes>
+
 namespace nesvis {
 
 CpuWidget::CpuWidget(n_e_s::nes::Nes *nes) : nes_{nes} {}
@@ -48,7 +50,7 @@ void CpuWidget::draw() {
         nes_->reset();
     }
 
-    ImGui::Text("Curr cycle: %llu", nes_->current_cycle());
+    ImGui::Text("Curr cycle: %" PRIu64, nes_->current_cycle());
 
     const auto reg = nes_->cpu_registers();
 
