@@ -103,9 +103,11 @@ void PpuWidget::draw() {
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         for (uint16_t y = 0; y < 30; ++y) {
             for (uint16_t x = 0; x < 32; ++x) {
-                const auto cell_data = ppu_helper_->get_nametable_cell(x, y);
+                const auto nametable_cell =
+                        ppu_helper_->get_nametable_cell(x, y);
+                const auto attr_cell = ppu_helper_->get_attribute_cell(x, y);
                 const int modified_tile_index =
-                        cell_data.tile_index +
+                        nametable_cell.tile_index +
                         kPatternTableSize * pattern_table;
 
                 if (x != 0) {
@@ -114,9 +116,12 @@ void PpuWidget::draw() {
                 ImGui::Image(pattern_table_sprites_[modified_tile_index]);
                 if (ImGui::IsItemHovered()) {
                     ImGui::BeginTooltip();
-                    ImGui::Text("Address: %04hX", cell_data.address);
-                    ImGui::Text("Tile index: %02hX", cell_data.tile_index);
+                    ImGui::Text("Ppu address: %04hX", nametable_cell.address);
+                    ImGui::Text("Tile index: %02hX", nametable_cell.tile_index);
                     ImGui::Text("Tile index mod: %04X", modified_tile_index);
+                    ImGui::Text("Attr address: %04hX", attr_cell.address);
+                    ImGui::Text("Attribute: %02hX", attr_cell.attribute);
+                    ImGui::Text("Palette: %02hX", attr_cell.palette);
                     ImGui::EndTooltip();
                 }
             }

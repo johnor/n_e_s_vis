@@ -97,7 +97,8 @@ sf::Texture PpuHelper::get_pattern_table_texture(uint16_t pos,
             const uint16_t mask = 1u << (7u - col);
             const uint8_t bit_a = !!(a & mask);
             const uint8_t bit_b = !!(b & mask);
-            const uint8_t color_index = bit_a | bit_b << 1u;
+            const uint8_t color_index =
+                    bit_a | static_cast<uint8_t>(bit_b << 1u);
 
             const auto color = get_background_color(palette, color_index);
             image.setPixel(col, row, color);
@@ -114,6 +115,22 @@ PpuHelper::NametableCell PpuHelper::get_nametable_cell(int x, int y) {
     const uint8_t tile_index = nes_->ppu_mmu().read_byte(address);
 
     return {.tile_index = tile_index, .address = address};
+}
+
+PpuHelper::AttributeCell PpuHelper::get_attribute_cell(int x, int y) {
+    // TODO(jn) handle mirroring, this will not work
+    const int attribute_x = x / 4;
+    const int attribute_y = y / 4;
+    const uint16_t address = 0x23C0 + attribute_y * 8 + attribute_x;
+    const uint8_t attribute_raw = nes_->ppu_mmu().read_byte(address);
+
+    // Unpack: value = (bottomright << 6) | (bottomleft << 4) | (topright << 2)
+    // | (topleft << 0)
+    const uint8_t shift = 2u * (x % 2u) + 4u * (y % 2u);
+    const uint8_t attr_shifted = attribute_raw >> shift;
+    const uint8_t palette = attr_shifted & 0b11u;
+
+    return {.attribute = attribute_raw, .palette = palette, .address = address};
 }
 
 sf::Color PpuHelper::get_color_from_index(uint16_t index) {

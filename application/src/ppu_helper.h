@@ -14,6 +14,11 @@ public:
         uint16_t tile_index;
         uint16_t address;
     };
+    struct AttributeCell {
+        uint16_t attribute;
+        uint8_t palette;
+        uint16_t address;
+    };
 
     explicit PpuHelper(n_e_s::nes::Nes *nes);
 
@@ -22,6 +27,7 @@ public:
             uint16_t palette);
 
     PpuHelper::NametableCell get_nametable_cell(int x, int y);
+    PpuHelper::AttributeCell get_attribute_cell(int x, int y);
 
     sf::Color get_color_from_index(uint16_t index);
     sf::Color get_background_color(uint16_t color_set, uint16_t index);
