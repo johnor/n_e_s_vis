@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
                         std::lround(pos.x), std::lround(pos.y), 0, 0, 255);
             }
 
-            ImGui::ShowDemoWindow();
+            // ImGui::ShowDemoWindow(); sfml-imgui doesn't expose this. :(
             cpu_widget.draw();
             ppu_widget.draw();
             log.draw();
