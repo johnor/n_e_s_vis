@@ -1,16 +1,8 @@
 include(FetchContent)
 
-FetchContent_Declare(
-  imgui
-  URL "https://github.com/ocornut/imgui/archive/v1.73.zip"
+FetchContent_Declare(imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG 688cf868ea83db6c2958dd6bf7a20d471d00940b # v1.73
 )
 
 FetchContent_MakeAvailable(imgui)
-
-set(ImGui_ROOT ${imgui_SOURCE_DIR} PARENT_SCOPE)
-
-file(GLOB ImGui_SOURCES "${imgui_SOURCE_DIR}/*.cpp")
-set(ImGui_SOURCES ${ImGui_SOURCES} PARENT_SCOPE)
-
-file(GLOB ImGui_HEADERS "${imgui_SOURCE_DIR}/*.h")
-set(ImGui_HEADERS ${ImGui_HEADERS} PARENT_SCOPE)
