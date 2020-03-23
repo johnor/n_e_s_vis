@@ -3,6 +3,7 @@
 #include "ppu_helper.h"
 #include "ppu_widget.h"
 #include "screen.h"
+#include "simple_renderer.h"
 
 #include "nes/nes.h"
 
@@ -54,17 +55,7 @@ int main(int argc, char **argv) {
     nesvis::CpuWidget cpu_widget(&nes);
     nesvis::PpuWidget ppu_widget(&nes, &ppu_helper);
 
-    for (int i = 0; i < 250; ++i) {
-        screen.set_pixel(i, i, 255, 0, 0);
-    }
-
-    for (int i = 0; i < 256; ++i) {
-        screen.set_pixel(i, 230, 0, 255, 0);
-    }
-    for (int i = 0; i < 240; ++i) {
-        screen.set_pixel(250, i, 0, 0, 255);
-    }
-    screen.set_pixel(kNesWidth - 1, kNesHeight - 1, 0xFFFFFFFF);
+    nesvis::SimpleRenderer renderer(&nes, &ppu_helper, &screen);
 
     try {
         if (argc > 1) {
@@ -83,14 +74,7 @@ int main(int argc, char **argv) {
 
             window.clear();
 
-            if (ImGui::IsMouseDown(0)) {
-                auto pos = sf::Vector2f(ImGui::GetMousePos());
-                pos.x /= kPixelSize;
-                pos.y /= kPixelSize;
-
-                screen.set_pixel(
-                        std::lround(pos.x), std::lround(pos.y), 0, 0, 255);
-            }
+            renderer.draw();
 
             // ImGui::ShowDemoWindow(); sfml-imgui doesn't expose this. :(
             cpu_widget.draw();

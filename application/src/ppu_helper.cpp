@@ -88,7 +88,7 @@ sf::Texture PpuHelper::get_pattern_table_texture(uint16_t pos,
 
     for (uint8_t row = 0; row < 8; ++row) {
         // Second pattern table starts at 0x1000
-        const uint16_t base_address = pattern_table * 0x1000 + pos + row;
+        const uint16_t base_address = pattern_table * 0x1000 + pos * 16 + row;
         const uint8_t a = nes_->ppu_mmu().read_byte(base_address);
         const uint8_t b = nes_->ppu_mmu().read_byte(base_address + 8u);
 
@@ -109,6 +109,31 @@ sf::Texture PpuHelper::get_pattern_table_texture(uint16_t pos,
     return texture;
 }
 
+PpuHelper::PatterntableCell PpuHelper::get_pattern_table_cell(uint16_t pos,
+        uint16_t pattern_table) {
+   PpuHelper::PatterntableCell cell;
+
+    for (uint8_t row = 0; row < 8; ++row) {
+        // Second pattern table starts at 0x1000
+        const uint16_t base_address = pattern_table * 0x1000 + pos * 16 + row;
+        const uint8_t a = nes_->ppu_mmu().read_byte(base_address);
+        const uint8_t b = nes_->ppu_mmu().read_byte(base_address + 8u);
+
+        for (uint8_t col = 0; col < 8u; ++col) {
+            // First column is the leftmost bit
+            const uint16_t mask = 1u << (7u - col);
+            const uint8_t bit_a = !!(a & mask);
+            const uint8_t bit_b = !!(b & mask);
+            const uint8_t color_index =
+                    bit_a | static_cast<uint8_t>(bit_b << 1u);
+
+            const uint8_t pixel_index = row * 8 + col;
+            cell.data[pixel_index] = color_index;
+        }
+    }
+    return cell;
+}
+
 PpuHelper::NametableCell PpuHelper::get_nametable_cell(int x, int y) {
     // TODO(jn) handle mirroring
     const uint16_t address = 0x2000 + y * 32 + x;
@@ -119,14 +144,18 @@ PpuHelper::NametableCell PpuHelper::get_nametable_cell(int x, int y) {
 
 PpuHelper::AttributeCell PpuHelper::get_attribute_cell(int x, int y) {
     // TODO(jn) handle mirroring, this will not work
+    // Each attribute cell has 4 tiles in it
     const int attribute_x = x / 4;
     const int attribute_y = y / 4;
     const uint16_t address = 0x23C0 + attribute_y * 8 + attribute_x;
     const uint8_t attribute_raw = nes_->ppu_mmu().read_byte(address);
 
-    // Unpack: value = (bottomright << 6) | (bottomleft << 4) | (topright << 2)
-    // | (topleft << 0)
-    const uint8_t shift = 2u * (x % 2u) + 4u * (y % 2u);
+    // Each attribute byte controls 2 tiles
+    // Unpack: value = (bottomright << 6) | (bottomleft << 4) |
+    //                 (topright << 2)    | (topleft << 0)
+    const int x2 = x / 2;
+    const int y2 = y / 2;
+    const uint8_t shift = 2u * (x2 % 2u) + 4u * (y2 % 2u);
     const uint8_t attr_shifted = attribute_raw >> shift;
     const uint8_t palette = attr_shifted & 0b11u;
 
@@ -137,8 +166,8 @@ sf::Color PpuHelper::get_color_from_index(uint16_t index) {
     return kPalette[index];
 }
 
-sf::Color PpuHelper::get_background_color(uint16_t color_set, uint16_t index) {
-    const uint16_t color_address = 0x3F00 + color_set * 4 + index;
+sf::Color PpuHelper::get_background_color(uint16_t palette, uint8_t index) {
+    const uint16_t color_address = 0x3F00 + palette * 4 + index;
     const uint8_t color_index = nes_->ppu_mmu().read_byte(color_address);
     return get_color_from_index(color_index);
 }

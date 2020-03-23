@@ -22,7 +22,7 @@ void PpuWidget::load_pattern_tables() {
     const uint16_t palette = 0; // TODO(jn) update to correct index
     for (int i = 0; i < kPatternTableSize; ++i) {
         pattern_table_textures_[i] =
-                ppu_helper_->get_pattern_table_texture(i * 16, 0, palette);
+                ppu_helper_->get_pattern_table_texture(i, 0, palette);
 
         sf::Sprite sprite(pattern_table_textures_[i]);
         sprite.setScale(2.f, 2.f);
@@ -32,7 +32,7 @@ void PpuWidget::load_pattern_tables() {
 
     for (int i = 0; i < kPatternTableSize; ++i) {
         pattern_table_textures_[kPatternTableSize + i] =
-                ppu_helper_->get_pattern_table_texture(i * 16, 1, palette);
+                ppu_helper_->get_pattern_table_texture(i, 1, palette);
 
         sf::Sprite sprite(pattern_table_textures_[kPatternTableSize + i]);
         sprite.setScale(2.f, 2.f);

@@ -22,6 +22,8 @@ add_executable(${PROJECT_NAME}
    src/ppu_widget.h
    src/screen.cpp
    src/screen.h
+   src/simple_renderer.cpp
+   src/simple_renderer.h
 )
 
 target_link_libraries(${PROJECT_NAME}

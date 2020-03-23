@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/Texture.hpp>
+#include <array>
 
 namespace n_e_s::nes {
 class Nes;
@@ -10,6 +11,10 @@ namespace nesvis {
 
 class PpuHelper {
 public:
+    struct PatterntableCell {
+        std::array<uint8_t, 8 * 8> data;
+        uint16_t address;
+    };
     struct NametableCell {
         uint16_t tile_index;
         uint16_t address;
@@ -26,11 +31,14 @@ public:
             uint16_t pattern_table,
             uint16_t palette);
 
+    PatterntableCell get_pattern_table_cell(uint16_t pos,
+            uint16_t pattern_table);
+
     PpuHelper::NametableCell get_nametable_cell(int x, int y);
     PpuHelper::AttributeCell get_attribute_cell(int x, int y);
 
     sf::Color get_color_from_index(uint16_t index);
-    sf::Color get_background_color(uint16_t color_set, uint16_t index);
+    sf::Color get_background_color(uint16_t palette, uint8_t index);
 
     static constexpr int kPaletteSize = 64;
 
