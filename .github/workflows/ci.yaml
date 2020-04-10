@@ -43,6 +43,7 @@ jobs:
           python3 -m pip install pip --upgrade
           python3 -m pip install cmake==3.14.4 ninja==1.9.0.post1 --upgrade
 
+          sudo apt update
           sudo apt-get install -y libxrandr-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev
 
           if [ "${{ matrix.compiler }}" = "gcc" ]; then
