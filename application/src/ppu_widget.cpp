@@ -129,6 +129,31 @@ void PpuWidget::draw() {
         ImGui::PopStyleVar(1);
     }
 
+    if (ImGui::CollapsingHeader("Sprites")) {
+        const int pattern_table = reg.ctrl & 0x10u ? 1 : 0;
+        ImGui::Text("%s: %i", "Pattern table used: ", pattern_table);
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+        for (uint8_t index = 0; index < 64; ++index) {
+            const auto sprite = ppu_helper_->get_sprite(index);
+            const int modified_tile_index =
+                    sprite.tile_index + kPatternTableSize * pattern_table;
+
+            if (index % 8 != 0) {
+                ImGui::SameLine();
+            }
+            ImGui::Image(pattern_table_sprites_[modified_tile_index]);
+            if (ImGui::IsItemHovered()) {
+                ImGui::BeginTooltip();
+                ImGui::Text("Index: %02hX", index);
+                ImGui::Text("x: %i", sprite.x);
+                ImGui::Text("y: %i", sprite.y);
+                ImGui::Text("Palette: %02hX", sprite.palette);
+                ImGui::EndTooltip();
+            }
+        }
+        ImGui::PopStyleVar(1);
+    }
+
     ImGui::Text("Palette");
 
     ImGui::Text("Background palette");

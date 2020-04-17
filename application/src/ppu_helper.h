@@ -24,6 +24,17 @@ public:
         uint8_t palette;
         uint16_t address;
     };
+    struct Sprite {
+        uint8_t x;
+        uint8_t y;
+        uint8_t tile_index;
+        uint8_t attribute;
+
+        uint8_t palette;
+        bool front_of_bkg;
+        bool flip_horizontally;
+        bool flip_vertically;
+    };
 
     explicit PpuHelper(n_e_s::nes::Nes *nes);
 
@@ -36,6 +47,7 @@ public:
 
     PpuHelper::NametableCell get_nametable_cell(int x, int y);
     PpuHelper::AttributeCell get_attribute_cell(int x, int y);
+    PpuHelper::Sprite get_sprite(uint8_t sprite_index);
 
     sf::Color get_color_from_index(uint16_t index);
     sf::Color get_background_color(uint16_t palette, uint8_t index);

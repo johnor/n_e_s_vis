@@ -1,6 +1,7 @@
 #include "ppu_helper.h"
 
 #include "core/immu.h"
+#include "core/ippu.h"
 #include "nes/nes.h"
 
 #include <array>
@@ -111,7 +112,7 @@ sf::Texture PpuHelper::get_pattern_table_texture(uint16_t pos,
 
 PpuHelper::PatterntableCell PpuHelper::get_pattern_table_cell(uint16_t pos,
         uint16_t pattern_table) {
-   PpuHelper::PatterntableCell cell;
+    PpuHelper::PatterntableCell cell;
 
     for (uint8_t row = 0; row < 8; ++row) {
         // Second pattern table starts at 0x1000
@@ -160,6 +161,35 @@ PpuHelper::AttributeCell PpuHelper::get_attribute_cell(int x, int y) {
     const uint8_t palette = attr_shifted & 0b11u;
 
     return {.attribute = attribute_raw, .palette = palette, .address = address};
+}
+
+PpuHelper::Sprite PpuHelper::get_sprite(uint8_t sprite_index) {
+    constexpr uint16_t kOamAddr = 0x2003;
+    constexpr uint16_t kOamData = 0x2004;
+    const uint8_t oam_addr = sprite_index * 4u;
+
+    nes_->ppu().write_byte(kOamAddr, oam_addr);
+    const uint8_t y = nes_->ppu().read_byte(kOamData);
+    nes_->ppu().write_byte(kOamAddr, oam_addr + 1u);
+    const uint8_t tile_index = nes_->ppu().read_byte(kOamData);
+    nes_->ppu().write_byte(kOamAddr, oam_addr + 2u);
+    const uint8_t attribute = nes_->ppu().read_byte(kOamData);
+    nes_->ppu().write_byte(kOamAddr, oam_addr + 3u);
+    const uint8_t x = nes_->ppu().read_byte(kOamData);
+
+    const bool flip_vertically = attribute & 0b1000'0000;
+    const bool flip_horizontally = attribute & 0b0100'0000;
+    const bool front_of_bkg = attribute & 0b0010'0000;
+    const uint8_t palette = attribute & 0b0000'0011;
+
+    return {.x = x,
+            .y = y,
+            .tile_index = tile_index,
+            .attribute = attribute,
+            .palette = palette,
+            .front_of_bkg = front_of_bkg,
+            .flip_horizontally = flip_horizontally,
+            .flip_vertically = flip_vertically};
 }
 
 sf::Color PpuHelper::get_color_from_index(uint16_t index) {
