@@ -81,8 +81,8 @@ void CpuWidget::draw() {
             nes_->mmu().read_byte(pc_start + 2));
 
     const auto opcode = n_e_s::core::decode(nes_->mmu().read_byte(pc_start));
-    ImGui::Text(
-            "Instruction: %s", n_e_s::core::to_string(opcode.family).c_str());
+    const auto family = std::string(n_e_s::core::to_string(opcode.family));
+    ImGui::Text("Instruction: %s", family.c_str());
 
     ImGui::Text("Stack contents:");
     for (int i = reg.sp + 1; i <= 0xFF; ++i) {
