@@ -29,86 +29,86 @@ constexpr int kWinWidth = kNesWidth * kPixelSize;
 constexpr int kWinHeight = kNesHeight * kPixelSize;
 
 void poll_events(sf::RenderWindow &window) {
-   sf::Event event;
-   while (window.pollEvent(event)) {
-      ImGui::SFML::ProcessEvent(event);
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        ImGui::SFML::ProcessEvent(event);
 
-      if (event.type == sf::Event::Closed) {
-         window.close();
-      }
-   }
+        if (event.type == sf::Event::Closed) {
+            window.close();
+        }
+    }
 }
 
 } // namespace
 
 int main(int argc, char **argv) {
-   sf::RenderWindow window(
-      sf::VideoMode(kWinWidth, kWinHeight), "n_e_s visulization");
-   constexpr int kFps = 20;
-   window.setFramerateLimit(kFps);
+    sf::RenderWindow window(
+            sf::VideoMode(kWinWidth, kWinHeight), "n_e_s visulization");
+    constexpr int kFps = 20;
+    window.setFramerateLimit(kFps);
 
-   ImGui::SFML::Init(window);
+    ImGui::SFML::Init(window);
 
-   nesvis::Screen screen(kNesWidth, kNesHeight, kPixelSize);
-   n_e_s::nes::Nes nes;
-   nesvis::PpuHelper ppu_helper(&nes);
-   nesvis::LogWidget log;
-   nesvis::CpuWidget cpu_widget(&nes);
-   nesvis::PpuWidget ppu_widget(&nes, &ppu_helper);
+    nesvis::Screen screen(kNesWidth, kNesHeight, kPixelSize);
+    n_e_s::nes::Nes nes;
+    nesvis::PpuHelper ppu_helper(&nes);
+    nesvis::LogWidget log;
+    nesvis::CpuWidget cpu_widget(&nes);
+    nesvis::PpuWidget ppu_widget(&nes, &ppu_helper);
 
-   nesvis::SimpleRenderer renderer(&nes, &ppu_helper, &screen);
+    nesvis::SimpleRenderer renderer(&nes, &ppu_helper, &screen);
 
-   try {
-      if (argc > 1) {
-         log.add("Loading rom from: " + std::string(argv[1]));
-         nes.load_rom(argv[1]);
-      }
+    try {
+        if (argc > 1) {
+            log.add("Loading rom from: " + std::string(argv[1]));
+            nes.load_rom(argv[1]);
+        }
 
-      ppu_widget.load_pattern_tables();
+        ppu_widget.load_pattern_tables();
 
-      sf::Clock delta_clock;
-      while (window.isOpen()) {
-         poll_events(window);
+        sf::Clock delta_clock;
+        while (window.isOpen()) {
+            poll_events(window);
 
-         const sf::Time delta_time = delta_clock.restart();
-         ImGui::SFML::Update(window, delta_time);
+            const sf::Time delta_time = delta_clock.restart();
+            ImGui::SFML::Update(window, delta_time);
 
-         window.clear();
+            window.clear();
 
-         renderer.draw();
-         cpu_widget.draw();
-         ppu_widget.draw();
-         log.draw();
-         screen.draw(window);
+            renderer.draw();
+            cpu_widget.draw();
+            ppu_widget.draw();
+            log.draw();
+            screen.draw(window);
 
-         ImGui::SFML::Render(window);
-         window.display();
+            ImGui::SFML::Render(window);
+            window.display();
 
-         // robinlinden/desunes
-         constexpr size_t kMasterClock = 21'477'272; // Hz
-         // Tick rates:
-         // CPU: every 12 master ticks
-         // PPU: every 4
-         // APU: every 24
-         constexpr size_t kNESClock = kMasterClock / 4;
-         constexpr size_t kTickPerFrame = kNESClock / kFps;
-         if (true) {
-            for (size_t i = 0; i < kTickPerFrame; ++i) {
-               nes.execute();
+            // robinlinden/desunes
+            constexpr size_t kMasterClock = 21'477'272; // Hz
+            // Tick rates:
+            // CPU: every 12 master ticks
+            // PPU: every 4
+            // APU: every 24
+            constexpr size_t kNESClock = kMasterClock / 4;
+            constexpr size_t kTickPerFrame = kNESClock / kFps;
+            if (true) {
+                for (size_t i = 0; i < kTickPerFrame; ++i) {
+                    nes.execute();
+                }
             }
-         }
 
-         const auto frame_time = delta_time;
-         if (frame_time.asMilliseconds() > 1000 / kFps) {
-            std::cerr << "Things are running slowly: "
-               << frame_time.asMilliseconds() << "ms" << std::endl;
-         }
-      }
+            const auto frame_time = delta_time;
+            if (frame_time.asMilliseconds() > 1000 / kFps) {
+                std::cerr << "Things are running slowly: "
+                          << frame_time.asMilliseconds() << "ms" << std::endl;
+            }
+        }
 
-      ImGui::SFML::Shutdown();
-   } catch (const std::exception &e) {
-      std::cout << e.what() << std::endl;
-   }
+        ImGui::SFML::Shutdown();
+    } catch (const std::exception &e) {
+        std::cout << e.what() << std::endl;
+    }
 
-   return 0;
+    return 0;
 }
