@@ -51,6 +51,7 @@ public:
 
     sf::Color get_color_from_index(uint16_t index);
     sf::Color get_background_color(uint16_t palette, uint8_t index);
+    sf::Color get_sprite_color(uint16_t palette, uint8_t index);
 
     static constexpr int kPaletteSize = 64;
 

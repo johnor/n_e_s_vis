@@ -202,4 +202,10 @@ sf::Color PpuHelper::get_background_color(uint16_t palette, uint8_t index) {
     return get_color_from_index(color_index);
 }
 
+sf::Color PpuHelper::get_sprite_color(uint16_t palette, uint8_t index) {
+    const uint16_t color_address = 0x3F10 + palette * 4 + index;
+    const uint8_t color_index = nes_->ppu_mmu().read_byte(color_address);
+    return get_color_from_index(color_index);
+}
+
 } // namespace nesvis

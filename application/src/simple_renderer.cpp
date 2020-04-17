@@ -39,6 +39,28 @@ void SimpleRenderer::draw() {
             }
         }
     }
+
+    for (uint8_t sprite_index = 0; sprite_index < 64; ++sprite_index) {
+        const auto sprite = ppu_helper_->get_sprite(sprite_index);
+
+        const auto pattern_cell = ppu_helper_->get_pattern_table_cell(
+                sprite.tile_index, pattern_table);
+
+        for (uint16_t pattern_y = 0; pattern_y < 8; ++pattern_y) {
+            for (uint16_t pattern_x = 0; pattern_x < 8; ++pattern_x) {
+                const int data_index = pattern_y * 8 + pattern_x;
+                const int index = pattern_cell.data[data_index];
+
+                if (index > 0) {
+                    const auto color = ppu_helper_->get_sprite_color(
+                            sprite.palette, index);
+                    const int pixel_x = sprite.x + pattern_x;
+                    const int pixel_y = sprite.y + pattern_y;
+                    screen_->set_pixel(pixel_x, pixel_y, color);
+                }
+            }
+        }
+    }
 }
 
 } // namespace nesvis
