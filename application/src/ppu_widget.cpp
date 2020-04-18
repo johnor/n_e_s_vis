@@ -130,13 +130,14 @@ void PpuWidget::draw() {
     }
 
     if (ImGui::CollapsingHeader("Sprites")) {
-        const int pattern_table = reg.ctrl & 0x10u ? 1 : 0;
-        ImGui::Text("%s: %i", "Pattern table used: ", pattern_table);
+        const int sprite_pattern_table = reg.ctrl & 0b000'1000 ? 1 : 0;
+        ImGui::Text("%s: %i", "Sprite pattern table: ", sprite_pattern_table);
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
         for (uint8_t index = 0; index < 64; ++index) {
             const auto sprite = ppu_helper_->get_sprite(index);
             const int modified_tile_index =
-                    sprite.tile_index + kPatternTableSize * pattern_table;
+                    sprite.tile_index +
+                    kPatternTableSize * sprite_pattern_table;
 
             if (index % 8 != 0) {
                 ImGui::SameLine();
