@@ -23,10 +23,10 @@ namespace {
 
 constexpr int kNesWidth = 256;
 constexpr int kNesHeight = 240;
-constexpr int kPixelSize = 4;
+constexpr float kNesScaleFactor = 3.f;
 
-constexpr int kWinWidth = kNesWidth * kPixelSize;
-constexpr int kWinHeight = kNesHeight * kPixelSize;
+constexpr int kWinWidth = kNesWidth * 5;
+constexpr int kWinHeight = kNesHeight * 4;
 
 void poll_events(sf::RenderWindow &window) {
     sf::Event event;
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
     ImGui::SFML::Init(window);
 
-    nesvis::Screen screen(kNesWidth, kNesHeight, kPixelSize);
+    nesvis::Screen screen(kNesWidth, kNesHeight, kNesScaleFactor);
     n_e_s::nes::Nes nes;
     nesvis::PpuHelper ppu_helper(&nes);
     nesvis::LogWidget log;

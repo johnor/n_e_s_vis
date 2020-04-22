@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 #include <cstdint>
 
@@ -9,7 +10,7 @@ namespace nesvis {
 
 class Screen {
 public:
-    Screen(unsigned int width, unsigned int height, unsigned int pixel_size);
+    Screen(unsigned int width, unsigned int height, float scaling);
 
     void draw(sf::RenderWindow &window);
 
@@ -22,8 +23,9 @@ public:
     void set_pixel(unsigned int x, unsigned int y, const sf::Color &color);
 
 private:
-    unsigned int pixel_size_;
+    float scaling_;
 
+    sf::Texture texture_;
     sf::Image image_;
 };
 
