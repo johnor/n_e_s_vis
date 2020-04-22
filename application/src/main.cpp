@@ -48,6 +48,9 @@ int main(int argc, char **argv) {
     window.setFramerateLimit(kFps);
 
     ImGui::SFML::Init(window);
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigDockingNoSplit = true;
 
     nesvis::Screen screen(kNesWidth, kNesHeight, kNesScaleFactor);
     n_e_s::nes::Nes nes;
