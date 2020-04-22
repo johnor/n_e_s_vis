@@ -34,6 +34,7 @@ target_link_libraries(${PROJECT_NAME}
         sfml-system
         sfml-graphics
         imgui-sfml
+        fmt
 )
 
 target_compile_features(${PROJECT_NAME}

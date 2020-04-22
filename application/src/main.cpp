@@ -4,6 +4,7 @@
 #include "ppu_widget.h"
 #include "screen.h"
 #include "simple_renderer.h"
+#include "memory_widget.h"
 
 #include "nes/nes.h"
 
@@ -58,6 +59,7 @@ int main(int argc, char **argv) {
     nesvis::LogWidget log;
     nesvis::CpuWidget cpu_widget(&nes);
     nesvis::PpuWidget ppu_widget(&nes, &ppu_helper);
+    nesvis::MemoryWidget memory_widget(&nes);
 
     nesvis::SimpleRenderer renderer(&nes, &ppu_helper, &screen);
 
@@ -82,6 +84,7 @@ int main(int argc, char **argv) {
             cpu_widget.draw();
             ppu_widget.draw();
             log.draw();
+            memory_widget.draw();
             screen.draw(window);
 
             ImGui::SFML::Render(window);
