@@ -77,7 +77,7 @@ void PpuWidget::draw_patterntables() {
         ImGui::Image(pattern_table_textures_[i], {kSpriteSize, kSpriteSize});
         if (ImGui::IsItemHovered()) {
             ImGui::BeginTooltip();
-            ImGui::Text("Index: %02hX", i);
+            ImGui::Text("Index: %02X", i);
             ImGui::EndTooltip();
         }
     }
@@ -89,7 +89,7 @@ void PpuWidget::draw_patterntables() {
         ImGui::Image(pattern_table_textures_[i], {kSpriteSize, kSpriteSize});
         if (ImGui::IsItemHovered()) {
             ImGui::BeginTooltip();
-            ImGui::Text("Index: %02hX", i - kPatternTableSize);
+            ImGui::Text("Index: %02X", i - kPatternTableSize);
             ImGui::EndTooltip();
         }
     }
@@ -119,7 +119,7 @@ void PpuWidget::draw_nametables() {
                 ImGui::Text("Tile index mod: %04X", modified_tile_index);
                 ImGui::Text("Attr address: %04hX", attr_cell.address);
                 ImGui::Text("Attribute: %02hX", attr_cell.attribute);
-                ImGui::Text("Palette: %02hX", attr_cell.palette);
+                ImGui::Text("Palette: %02hhX", attr_cell.palette);
                 ImGui::EndTooltip();
             }
         }
@@ -129,7 +129,7 @@ void PpuWidget::draw_nametables() {
 
 void PpuWidget::draw_sprites() {
     const auto reg = nes_->ppu_registers();
-    const int sprite_pattern_table = reg.ctrl & 0b000'1000 ? 1 : 0;
+    const int sprite_pattern_table = reg.ctrl & 0b000'1000u ? 1 : 0;
     ImGui::Text("%s: %i", "Sprite pattern table: ", sprite_pattern_table);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
     for (uint8_t index = 0; index < 64; ++index) {
@@ -144,10 +144,10 @@ void PpuWidget::draw_sprites() {
                 {kSpriteSize, kSpriteSize});
         if (ImGui::IsItemHovered()) {
             ImGui::BeginTooltip();
-            ImGui::Text("Index: %02hX", index);
-            ImGui::Text("x: %i", sprite.x);
-            ImGui::Text("y: %i", sprite.y);
-            ImGui::Text("Palette: %02hX", sprite.palette);
+            ImGui::Text("Index: %02hhX", index);
+            ImGui::Text("x: %hhu", sprite.x);
+            ImGui::Text("y: %hhu", sprite.y);
+            ImGui::Text("Palette: %02hhX", sprite.palette);
             ImGui::EndTooltip();
         }
     }
