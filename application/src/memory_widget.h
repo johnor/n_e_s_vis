@@ -20,8 +20,8 @@ public:
     MemoryWidget(n_e_s::nes::Nes *nes) : nes_(nes) {}
 
     void draw() {
-        ImGui::Begin("Memory viewer", nullptr, ImGuiWindowFlags_NoResize);
-        ImGui::SetWindowSize(ImVec2(470, 440), ImGuiCond_Always);
+        ImGui::Begin("Memory viewer", nullptr);
+        ImGui::SetWindowSize(ImVec2(470, 440), ImGuiCond_FirstUseEver);
 
         ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None);
 
