@@ -1,6 +1,6 @@
 #include "simple_renderer.h"
 
-#include "core/ippu.h"
+#include "nes/core/ippu.h"
 #include "nes/nes.h"
 #include "ppu_helper.h"
 #include "screen.h"

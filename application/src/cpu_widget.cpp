@@ -1,8 +1,8 @@
 #include "cpu_widget.h"
 
-#include "core/immu.h"
-#include "core/imos6502.h"
-#include "core/opcode.h"
+#include "nes/core/immu.h"
+#include "nes/core/imos6502.h"
+#include "nes/core/opcode.h"
 #include "nes/nes.h"
 
 #include "imgui-SFML.h"

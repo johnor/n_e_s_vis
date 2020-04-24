@@ -1,10 +1,10 @@
 #pragma once
 
-#include "core/invalid_address.h"
 #include "imgui-SFML.h"
 #include "imgui.h"
 
-#include "core/immu.h"
+#include "nes/core/invalid_address.h"
+#include "nes/core/immu.h"
 #include "nes/nes.h"
 
 #include <fmt/format.h>

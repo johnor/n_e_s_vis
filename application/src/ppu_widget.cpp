@@ -1,8 +1,8 @@
 #include "ppu_widget.h"
 
-#include "core/immu.h"
-#include "core/invalid_address.h"
-#include "core/ippu.h"
+#include "nes/core/immu.h"
+#include "nes/core/invalid_address.h"
+#include "nes/core/ippu.h"
 #include "nes/nes.h"
 #include "ppu_helper.h"
 

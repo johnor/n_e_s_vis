@@ -1,7 +1,7 @@
 #include "ppu_helper.h"
 
-#include "core/immu.h"
-#include "core/ippu.h"
+#include "nes/core/immu.h"
+#include "nes/core/ippu.h"
 #include "nes/nes.h"
 
 #include <array>
