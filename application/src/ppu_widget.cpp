@@ -142,62 +142,64 @@ void PpuWidget::draw() {
         ImGui::PopStyleVar(1);
     }
 
-    ImGui::Text("Palette");
+    if (ImGui::CollapsingHeader("Palettes")) {
+        ImGui::Text("Background palette");
+        ImGui::PushID("background palette");
 
-    ImGui::Text("Background palette");
-    ImGui::PushID("background palette");
+        const std::array<std::string, 8> palette_text = {"Background 0",
+                "Background 1",
+                "Background 2",
+                "Background 3",
+                "Sprite 0",
+                "Sprite 1",
+                "Sprite 2",
+                "Sprite 3"};
+        int text_index = 0;
 
-    const std::array<std::string, 8> palette_text = {"Background 0",
-            "Background 1",
-            "Background 2",
-            "Background 3",
-            "Sprite 0",
-            "Sprite 1",
-            "Sprite 2",
-            "Sprite 3"};
-    int text_index = 0;
+        for (uint16_t address = 0x3F00; address < 0x3F20; ++address) {
+            const uint8_t palette_index = nes_->ppu().read_byte(address);
+            ImGui::PushID(palette_index);
+            if ((address % 4) == 0) {
+                ImGui::Text("%s", palette_text[text_index++].c_str());
+                ImGui::SameLine(100);
+            }
+            if ((address % 4) != 0) {
+                ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+            }
+            const ImVec4 color =
+                    ppu_helper_->get_color_from_index(palette_index);
+            ImGui::ColorButton("##backgroundpalette",
+                    color,
+                    ImGuiColorEditFlags_NoPicker |
+                            ImGuiColorEditFlags_NoTooltip,
+                    ImVec2(20, 20));
+            if (ImGui::IsItemHovered()) {
+                ImGui::BeginTooltip();
+                ImGui::Text("Address: %04hX", address);
+                ImGui::Text("index: %02hhX", palette_index);
+                ImGui::EndTooltip();
+            }
 
-    for (uint16_t address = 0x3F00; address < 0x3F20; ++address) {
-        const uint8_t palette_index = nes_->ppu().read_byte(address);
-        ImGui::PushID(palette_index);
-        if ((address % 4) == 0) {
-            ImGui::Text("%s", palette_text[text_index++].c_str());
-            ImGui::SameLine(100);
+            ImGui::PopID();
         }
-        if ((address % 4) != 0) {
-            ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
-        }
-        const ImVec4 color = ppu_helper_->get_color_from_index(palette_index);
-        ImGui::ColorButton("##backgroundpalette",
-                color,
-                ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoTooltip,
-                ImVec2(20, 20));
-        if (ImGui::IsItemHovered()) {
-            ImGui::BeginTooltip();
-            ImGui::Text("Address: %04hX", address);
-            ImGui::Text("index: %02hhX", palette_index);
-            ImGui::EndTooltip();
-        }
+        ImGui::PopID(); // background palette
 
-        ImGui::PopID();
+        ImGui::PushID("palette");
+        for (int n = 0; n < ppu_helper_->kPaletteSize; n++) {
+            ImGui::PushID(n);
+            if ((n % 16) != 0) {
+                ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+            }
+            const ImVec4 color = ppu_helper_->get_color_from_index(n);
+            ImGui::ColorButton("##palette",
+                    color,
+                    ImGuiColorEditFlags_NoPicker,
+                    ImVec2(20, 20));
+
+            ImGui::PopID();
+        }
+        ImGui::PopID(); // palette
     }
-    ImGui::PopID(); // background palette
-
-    ImGui::PushID("palette");
-    for (int n = 0; n < ppu_helper_->kPaletteSize; n++) {
-        ImGui::PushID(n);
-        if ((n % 16) != 0) {
-            ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
-        }
-        const ImVec4 color = ppu_helper_->get_color_from_index(n);
-        ImGui::ColorButton("##palette",
-                color,
-                ImGuiColorEditFlags_NoPicker,
-                ImVec2(20, 20));
-
-        ImGui::PopID();
-    }
-    ImGui::PopID(); // palette
 
     ImGui::End(); // window
 }
