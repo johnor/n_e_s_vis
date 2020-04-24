@@ -21,7 +21,12 @@ public:
     void draw();
 
 private:
+    void draw_patterntables();
+    void draw_nametables();
+    void draw_sprites();
+    void draw_palettes();
     uint8_t try_get_ppu_mem(const uint16_t addr);
+
     n_e_s::nes::Nes *nes_{nullptr};
     PpuHelper *ppu_helper_{nullptr};
 
