@@ -10,7 +10,6 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
-#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
 namespace nesvis {
@@ -23,28 +22,12 @@ void PpuWidget::load_pattern_tables() {
     for (int i = 0; i < kPatternTableSize; ++i) {
         pattern_table_textures_[i] =
                 ppu_helper_->get_pattern_table_texture(i, 0, palette);
-
-        sf::Sprite sprite(pattern_table_textures_[i]);
-        sprite.setScale(2.f, 2.f);
-
-        pattern_table_sprites_[i] = sprite;
     }
 
     for (int i = 0; i < kPatternTableSize; ++i) {
         pattern_table_textures_[kPatternTableSize + i] =
                 ppu_helper_->get_pattern_table_texture(i, 1, palette);
-
-        sf::Sprite sprite(pattern_table_textures_[kPatternTableSize + i]);
-        sprite.setScale(2.f, 2.f);
-
-        pattern_table_sprites_[kPatternTableSize + i] = sprite;
     }
-}
-
-sf::Sprite PpuWidget::get_pattern_table_sprite(const int tile_index,
-        const int pattern_table) {
-    const int modified_index = tile_index + kPatternTableSize * pattern_table;
-    return pattern_table_sprites_[modified_index];
 }
 
 void PpuWidget::draw() {
@@ -76,7 +59,8 @@ void PpuWidget::draw() {
             if (i % 16 != 0) {
                 ImGui::SameLine();
             }
-            ImGui::Image(pattern_table_sprites_[i]);
+            ImGui::Image(
+                    pattern_table_textures_[i], {kSpriteSize, kSpriteSize});
             if (ImGui::IsItemHovered()) {
                 ImGui::BeginTooltip();
                 ImGui::Text("Index: %02hX", i);
@@ -88,7 +72,8 @@ void PpuWidget::draw() {
             if (i % 16 != 0) {
                 ImGui::SameLine();
             }
-            ImGui::Image(pattern_table_sprites_[i]);
+            ImGui::Image(
+                    pattern_table_textures_[i], {kSpriteSize, kSpriteSize});
             if (ImGui::IsItemHovered()) {
                 ImGui::BeginTooltip();
                 ImGui::Text("Index: %02hX", i - kPatternTableSize);
@@ -113,7 +98,8 @@ void PpuWidget::draw() {
                 if (x != 0) {
                     ImGui::SameLine();
                 }
-                ImGui::Image(pattern_table_sprites_[modified_tile_index]);
+                ImGui::Image(pattern_table_textures_[modified_tile_index],
+                        {kSpriteSize, kSpriteSize});
                 if (ImGui::IsItemHovered()) {
                     ImGui::BeginTooltip();
                     ImGui::Text("Ppu address: %04hX", nametable_cell.address);
@@ -142,7 +128,8 @@ void PpuWidget::draw() {
             if (index % 8 != 0) {
                 ImGui::SameLine();
             }
-            ImGui::Image(pattern_table_sprites_[modified_tile_index]);
+            ImGui::Image(pattern_table_textures_[modified_tile_index],
+                    {kSpriteSize, kSpriteSize});
             if (ImGui::IsItemHovered()) {
                 ImGui::BeginTooltip();
                 ImGui::Text("Index: %02hX", index);
