@@ -17,8 +17,10 @@ void SimpleRenderer::draw() {
 
     for (uint16_t cell_y = 0; cell_y < 30; ++cell_y) {
         for (uint16_t cell_x = 0; cell_x < 32; ++cell_x) {
+            // TODO (jn) What to set nametable to?
+            const uint16_t nametable = 0;
             const auto nametable_cell =
-                    ppu_helper_->get_nametable_cell(cell_x, cell_y);
+                    ppu_helper_->get_nametable_cell(cell_x, cell_y, nametable);
             const auto attr_cell =
                     ppu_helper_->get_attribute_cell(cell_x, cell_y);
 

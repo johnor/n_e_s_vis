@@ -45,7 +45,9 @@ public:
     PatterntableCell get_pattern_table_cell(uint16_t pos,
             uint16_t pattern_table);
 
-    PpuHelper::NametableCell get_nametable_cell(int x, int y);
+    PpuHelper::NametableCell get_nametable_cell(int x,
+            int y,
+            uint16_t nametable);
     PpuHelper::AttributeCell get_attribute_cell(int x, int y);
     PpuHelper::Sprite get_sprite(uint8_t sprite_index);
 

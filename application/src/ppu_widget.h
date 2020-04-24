@@ -23,6 +23,7 @@ public:
 private:
     void draw_patterntables();
     void draw_nametables();
+    void draw_nametable(uint16_t nametable);
     void draw_sprites();
     void draw_palettes();
     uint8_t try_get_ppu_mem(const uint16_t addr);

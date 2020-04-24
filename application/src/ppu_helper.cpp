@@ -135,9 +135,15 @@ PpuHelper::PatterntableCell PpuHelper::get_pattern_table_cell(uint16_t pos,
     return cell;
 }
 
-PpuHelper::NametableCell PpuHelper::get_nametable_cell(int x, int y) {
-    // TODO(jn) handle mirroring
-    const uint16_t address = 0x2000 + y * 32 + x;
+PpuHelper::NametableCell PpuHelper::get_nametable_cell(int x,
+        int y,
+        uint16_t nametable) {
+    // $2000-$23FF   $0400 Nametable 0
+    // $2400-$27FF   $0400 Nametable 1
+    // $2800-$2BFF   $0400 Nametable 2
+    // $2C00-$2FFF   $0400 Nametable 3
+    // $3000-$3EFF   $0F00 Mirrors of $2000-$2EFF
+    const uint16_t address = 0x2000 + 0x0400 * nametable + y * 32 + x;
     const uint8_t tile_index = nes_->ppu_mmu().read_byte(address);
 
     return {.tile_index = tile_index, .address = address};

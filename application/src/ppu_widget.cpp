@@ -99,10 +99,27 @@ void PpuWidget::draw_nametables() {
     const auto reg = nes_->ppu_registers();
     const int pattern_table = reg.ctrl & 0x10u ? 1 : 0;
     ImGui::Text("%s: %i", "Pattern table used: ", pattern_table);
+
+    if (ImGui::BeginTabBar("MyTabBar")) {
+        for (auto nametable = 0; nametable < 4; ++nametable) {
+            const std::string tab_name = "Nametable " + std::to_string(nametable);
+            if (ImGui::BeginTabItem(tab_name.c_str())) {
+                draw_nametable(nametable);
+                ImGui::EndTabItem();
+            }
+        }
+        ImGui::EndTabBar();
+    }
+}
+void PpuWidget::draw_nametable(uint16_t nametable) {
+    const auto reg = nes_->ppu_registers();
+    const int pattern_table = reg.ctrl & 0x10u ? 1 : 0;
+
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
     for (uint16_t y = 0; y < 30; ++y) {
         for (uint16_t x = 0; x < 32; ++x) {
-            const auto nametable_cell = ppu_helper_->get_nametable_cell(x, y);
+            const auto nametable_cell =
+                    ppu_helper_->get_nametable_cell(x, y, nametable);
             const auto attr_cell = ppu_helper_->get_attribute_cell(x, y);
             const int modified_tile_index = nametable_cell.tile_index +
                                             kPatternTableSize * pattern_table;
