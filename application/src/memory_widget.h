@@ -27,7 +27,7 @@ public:
 
         if (ImGui::BeginTabItem("Cpu")) {
             draw_tab("Cpu",
-                    cpu_mem_labels,
+                    cpu_mem_labels_,
                     0x5000,
                     [this](uint16_t address) -> uint8_t {
                         return nes_->mmu().read_byte(address);
@@ -36,7 +36,7 @@ public:
         }
         if (ImGui::BeginTabItem("Ppu")) {
             draw_tab("Ppu",
-                    ppu_mem_lables,
+                    ppu_mem_lables_,
                     0x4000,
                     [this](uint16_t address) -> uint8_t {
                         return nes_->ppu_mmu().read_byte(address);
@@ -52,7 +52,7 @@ private:
     void draw_tab(const std::string &title,
             const std::map<uint16_t, std::string> &memory_labels,
             uint16_t memory_size,
-            const std::function<uint8_t(uint16_t)>& memory_read_func) {
+            const std::function<uint8_t(uint16_t)> &memory_read_func) {
         std::optional<uint16_t> goto_address;
 
         if (memory_labels.size() > 0) {
@@ -143,7 +143,7 @@ private:
 
     n_e_s::nes::Nes *nes_{nullptr};
 
-    const std::map<uint16_t, std::string> cpu_mem_labels = {{0x0000, "Ram"},
+    const std::map<uint16_t, std::string> cpu_mem_labels_ = {{0x0000, "Ram"},
             {0x0800, "Mirror of 0x0000-0x07FF"},
             {0x1000, "Mirror of 0x0000-0x07FF"},
             {0x1800, "Mirror of 0x0000-0x07FF"},
@@ -151,7 +151,7 @@ private:
             {0x2008, "Mirror of 0x2000-0x2007"},
             {0x4000, "Apu and I/O register"},
             {0x4020, "Cartridge space"}};
-    const std::map<uint16_t, std::string> ppu_mem_lables = {
+    const std::map<uint16_t, std::string> ppu_mem_lables_ = {
             {0x0000, "Pattern table 0"},
             {0x1000, "Pattern table 1"},
             {0x2000, "Nametable 0"},
