@@ -11,8 +11,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nes_core)
 
 add_executable(${PROJECT_NAME}
+   src/control.h
    src/cpu_widget.cpp
    src/cpu_widget.h
+   src/gui.h
    src/log_widget.cpp
    src/log_widget.h
    src/main.cpp
