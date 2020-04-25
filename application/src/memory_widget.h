@@ -21,7 +21,6 @@ public:
 
     void draw() {
         ImGui::Begin("Memory viewer", nullptr);
-        ImGui::SetWindowSize(ImVec2(470, 440), ImGuiCond_FirstUseEver);
 
         ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None);
 
@@ -71,7 +70,7 @@ private:
         }
 
         constexpr int kColsPerLine = 16;
-        if (ImGui::BeginChild((title + "memory_child").c_str())) {
+        if (ImGui::BeginChild((title + "memory_child").c_str(), {0, 400})) {
             const int line_count_total =
                     ((memory_size + kColsPerLine - 1) / kColsPerLine);
             ImGuiListClipper clipper(line_count_total);

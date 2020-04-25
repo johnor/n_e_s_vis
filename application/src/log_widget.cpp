@@ -6,7 +6,11 @@
 namespace nesvis {
 
 void LogWidget::draw() {
+   const ImVec2 viewport_size = ImGui::GetMainViewport()->Size;
+
     ImGui::Begin("Log");
+    ImGui::SetWindowPos(ImVec2(0, viewport_size.y - 200), ImGuiCond_FirstUseEver);
+    ImGui::SetWindowSize(ImVec2(viewport_size.x - 500, 200), ImGuiCond_FirstUseEver);
 
     ImGui::BeginChild("Scrolling");
     for (const auto &a : text_list_) {
