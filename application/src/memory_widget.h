@@ -3,8 +3,8 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
-#include "nes/core/invalid_address.h"
 #include "nes/core/immu.h"
+#include "nes/core/invalid_address.h"
 #include "nes/nes.h"
 
 #include <fmt/format.h>
@@ -17,7 +17,7 @@ namespace nesvis {
 
 class MemoryWidget {
 public:
-    MemoryWidget(n_e_s::nes::Nes *nes) : nes_(nes) {}
+    explicit MemoryWidget(n_e_s::nes::Nes *nes) : nes_(nes) {}
 
     void draw() {
         ImGui::Begin("Memory viewer", nullptr);

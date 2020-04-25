@@ -102,7 +102,8 @@ void PpuWidget::draw_nametables() {
 
     if (ImGui::BeginTabBar("MyTabBar")) {
         for (auto nametable = 0; nametable < 4; ++nametable) {
-            const std::string tab_name = "Nametable " + std::to_string(nametable);
+            const std::string tab_name =
+                    "Nametable " + std::to_string(nametable);
             if (ImGui::BeginTabItem(tab_name.c_str())) {
                 draw_nametable(nametable);
                 ImGui::EndTabItem();

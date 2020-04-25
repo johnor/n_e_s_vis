@@ -1,10 +1,6 @@
-#include "cpu_widget.h"
-#include "log_widget.h"
-#include "ppu_helper.h"
-#include "ppu_widget.h"
+#include "gui.h"
 #include "screen.h"
 #include "simple_renderer.h"
-#include "memory_widget.h"
 
 #include "nes/nes.h"
 
@@ -49,27 +45,24 @@ int main(int argc, char **argv) {
     window.setFramerateLimit(kFps);
 
     ImGui::SFML::Init(window);
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigDockingNoSplit = true;
 
     nesvis::Screen screen(kNesWidth, kNesHeight, kNesScaleFactor);
     n_e_s::nes::Nes nes;
     nesvis::PpuHelper ppu_helper(&nes);
-    nesvis::LogWidget log;
-    nesvis::CpuWidget cpu_widget(&nes);
-    nesvis::PpuWidget ppu_widget(&nes, &ppu_helper);
-    nesvis::MemoryWidget memory_widget(&nes);
+    nesvis::Gui gui(&nes, &ppu_helper);
 
     nesvis::SimpleRenderer renderer(&nes, &ppu_helper, &screen);
 
     try {
         if (argc > 1) {
-            log.add("Loading rom from: " + std::string(argv[1]));
+            gui.log_widget.add("Loading rom from: " + std::string(argv[1]));
             nes.load_rom(argv[1]);
         }
 
-        ppu_widget.load_pattern_tables();
+        gui.ppu_widget.load_pattern_tables();
 
         sf::Clock delta_clock;
         while (window.isOpen()) {
@@ -81,10 +74,7 @@ int main(int argc, char **argv) {
             window.clear();
 
             renderer.draw();
-            cpu_widget.draw();
-            ppu_widget.draw();
-            log.draw();
-            memory_widget.draw();
+            gui.draw();
             screen.draw(window);
 
             ImGui::SFML::Render(window);
