@@ -2,6 +2,7 @@
 
 #include "imgui-SFML.h"
 #include "imgui.h"
+#include "misc/cpp/imgui_stdlib.h"
 
 #include "nes/core/immu.h"
 #include "nes/core/invalid_address.h"
@@ -52,8 +53,6 @@ private:
             const std::map<uint16_t, std::string> &memory_labels,
             uint16_t memory_size,
             const std::function<uint8_t(uint16_t)> &memory_read_func) {
-        std::optional<uint16_t> goto_address;
-
         if (memory_labels.size() > 0) {
             ImGui::Button((title + " Map").c_str());
             if (ImGui::BeginPopupContextItem(
@@ -62,7 +61,7 @@ private:
                     const std::string label =
                             fmt::format("${:04X}: {}", address, address_str);
                     if (ImGui::MenuItem(label.c_str())) {
-                        goto_address = address;
+                        goto_address_ = address;
                     }
                 }
                 ImGui::EndPopup();
@@ -89,19 +88,32 @@ private:
                         draw_mem_value(curr_address, mem_value);
                     }
                 }
-                if (goto_address) {
-                    const auto target_index =
-                            goto_address.value() / kColsPerLine;
-                    const float adjusted_offset =
-                            ImGui::GetCursorStartPos().y +
-                            target_index *
-                                    ImGui::GetTextLineHeightWithSpacing();
-                    ImGui::SetScrollFromPosY(adjusted_offset, 0.f);
-                    goto_address = std::nullopt;
-                }
+            }
+
+            if (goto_address_) {
+                const auto target_index = goto_address_.value() / kColsPerLine;
+                const float adjusted_offset =
+                        ImGui::GetCursorStartPos().y +
+                        target_index * ImGui::GetTextLineHeightWithSpacing();
+                ImGui::SetScrollFromPosY(adjusted_offset, 0.f);
+                goto_address_ = std::nullopt;
             }
             ImGui::EndChild();
         }
+
+        ImGui::Separator();
+
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Address:");
+        ImGui::SameLine();
+        ImGui::PushItemWidth(60.f);
+        if (ImGui::InputText("##addr",
+                    &goto_address_input_,
+                    ImGuiInputTextFlags_CharsHexadecimal |
+                            ImGuiInputTextFlags_EnterReturnsTrue)) {
+            goto_address_ = std::stoi(goto_address_input_, nullptr, 16);
+        }
+        ImGui::PopItemWidth();
     }
 
     std::optional<uint8_t> read_mem(
@@ -127,6 +139,8 @@ private:
         }
 
         if (ImGui::IsItemHovered()) {
+            goto_address_input_ = fmt::format("{:04X}", address);
+
             ImVec2 pos = ImGui::GetItemRectMin();
             pos.x -= 4;
             pos.y -= 4;
@@ -141,6 +155,8 @@ private:
     }
 
     n_e_s::nes::Nes *nes_{nullptr};
+    std::string goto_address_input_;
+    std::optional<uint16_t> goto_address_;
 
     const std::map<uint16_t, std::string> cpu_mem_labels_ = {{0x0000, "Ram"},
             {0x0800, "Mirror of 0x0000-0x07FF"},
