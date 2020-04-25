@@ -1,5 +1,6 @@
 #include "cpu_widget.h"
 
+#include "control.h"
 #include "nes/core/immu.h"
 #include "nes/core/imos6502.h"
 #include "nes/core/opcode.h"
@@ -12,30 +13,57 @@
 
 namespace nesvis {
 
-CpuWidget::CpuWidget(n_e_s::nes::Nes *nes) : nes_{nes} {}
+CpuWidget::CpuWidget(n_e_s::nes::Nes *nes, Control *control)
+        : nes_{nes}, control_{control} {}
 
 void CpuWidget::draw() {
     ImGui::Begin("Nes cpu");
 
+    if (control_->is_running()) {
+        if (ImGui::Button("Pause")) {
+            control_->pause();
+        }
+    } else {
+        if (ImGui::Button("Run")) {
+            control_->run();
+        }
+    }
+
+    if (ImGui::Button("Stepi")) {
+        control_->stepi();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Stepi 1000")) {
+        for (int i = 0; i < 1000; ++i) {
+            control_->stepi();
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Stepi 10000")) {
+        for (int i = 0; i < 10000; ++i) {
+            control_->stepi();
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Stepi 100000")) {
+        for (int i = 0; i < 100000; ++i) {
+            control_->stepi();
+        }
+    }
+
     if (ImGui::Button("Step")) {
-        nes_->execute();
+        control_->step();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Step 10")) {
+        for (int i = 0; i < 10; ++i) {
+            control_->step();
+        }
     }
     ImGui::SameLine();
     if (ImGui::Button("Step 1000")) {
         for (int i = 0; i < 1000; ++i) {
-            nes_->execute();
-        }
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Step 10000")) {
-        for (int i = 0; i < 10000; ++i) {
-            nes_->execute();
-        }
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Step 100000")) {
-        for (int i = 0; i < 100000; ++i) {
-            nes_->execute();
+            control_->step();
         }
     }
 

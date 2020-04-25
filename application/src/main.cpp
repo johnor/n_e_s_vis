@@ -1,3 +1,5 @@
+#include "control.h"
+#include "cpu_widget.h"
 #include "gui.h"
 #include "screen.h"
 #include "simple_renderer.h"
@@ -51,8 +53,9 @@ int main(int argc, char **argv) {
 
     nesvis::Screen screen(kNesWidth, kNesHeight, kNesScaleFactor);
     n_e_s::nes::Nes nes;
+    nesvis::Control control(&nes);
     nesvis::PpuHelper ppu_helper(&nes);
-    nesvis::Gui gui(&nes, &ppu_helper);
+    nesvis::Gui gui(&nes, &ppu_helper, &control);
 
     nesvis::SimpleRenderer renderer(&nes, &ppu_helper, &screen);
 
@@ -88,7 +91,7 @@ int main(int argc, char **argv) {
             // APU: every 24
             constexpr size_t kNESClock = kMasterClock / 4;
             constexpr size_t kTickPerFrame = kNESClock / kFps;
-            if (true) {
+            if (control.is_running()) {
                 for (size_t i = 0; i < kTickPerFrame; ++i) {
                     nes.execute();
                 }

@@ -11,11 +11,13 @@
 
 namespace nesvis {
 
+class Control;
+
 class Gui {
 public:
-    Gui(n_e_s::nes::Nes *nes, nesvis::PpuHelper *ppu_helper)
+    Gui(n_e_s::nes::Nes *nes, PpuHelper *ppu_helper, Control *control)
             : log_widget(),
-              cpu_widget(nes),
+              cpu_widget(nes, control),
               ppu_widget(nes, ppu_helper),
               memory_widget(nes) {}
 
@@ -28,7 +30,8 @@ public:
                     ImGui::DockBuilderAddNode(0, ImGuiDockNodeFlags_None);
             ImGui::DockBuilderSetNodePos(dock_id_right,
                     ImVec2(viewport_size.x - 500, viewport_pos.y));
-            ImGui::DockBuilderSetNodeSize(dock_id_right, ImVec2(500, viewport_size.y));
+            ImGui::DockBuilderSetNodeSize(
+                    dock_id_right, ImVec2(500, viewport_size.y));
             ImGui::DockBuilderDockWindow("Nes cpu", dock_id_right);
             ImGui::DockBuilderDockWindow("Nes ppu", dock_id_right);
             ImGui::DockBuilderDockWindow("Memory viewer", dock_id_right);
