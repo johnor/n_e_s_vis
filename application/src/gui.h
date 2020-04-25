@@ -40,10 +40,10 @@ public:
             first_ = false;
         }
 
-        cpu_widget.draw();
-        ppu_widget.draw();
-        memory_widget.draw();
         log_widget.draw();
+        memory_widget.draw();
+        ppu_widget.draw();
+        cpu_widget.draw();
     }
 
     nesvis::LogWidget log_widget;
