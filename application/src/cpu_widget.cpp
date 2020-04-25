@@ -113,8 +113,10 @@ void CpuWidget::draw() {
     ImGui::Text("Instruction: %s", family.c_str());
 
     ImGui::Text("Stack contents:");
-    for (int i = reg.sp + 1; i <= 0xFF; ++i) {
-        ImGui::Text("%02X: %02hhX", i, nes_->mmu().read_byte(0x0100 + i));
+    if (ImGui::BeginChild("stack_content", {0, 200})) {
+        for (int i = reg.sp + 1; i <= 0xFF; ++i) {
+            ImGui::Text("%02X: %02hhX", i, nes_->mmu().read_byte(0x0100 + i));
+        }
     }
 
     ImGui::End();
