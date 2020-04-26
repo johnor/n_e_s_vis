@@ -118,6 +118,7 @@ void CpuWidget::draw() {
             ImGui::Text("%02X: %02hhX", i, nes_->mmu().read_byte(0x0100 + i));
         }
     }
+    ImGui::EndChild();
 
     ImGui::End();
 }

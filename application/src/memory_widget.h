@@ -98,8 +98,8 @@ private:
                 ImGui::SetScrollFromPosY(adjusted_offset, 0.f);
                 goto_address_ = std::nullopt;
             }
-            ImGui::EndChild();
         }
+        ImGui::EndChild();
 
         ImGui::Separator();
 
