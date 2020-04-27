@@ -4,6 +4,7 @@
 #include "nes/core/immu.h"
 #include "nes/core/imos6502.h"
 #include "nes/core/opcode.h"
+#include "nes/disassembler.h"
 #include "nes/nes.h"
 
 #include "imgui-SFML.h"
@@ -117,9 +118,24 @@ void CpuWidget::draw() {
             nes_->mmu().read_byte(pc_start + 1),
             nes_->mmu().read_byte(pc_start + 2));
 
-    const auto opcode = n_e_s::core::decode(nes_->mmu().read_byte(pc_start));
-    const auto family = std::string(n_e_s::core::to_string(opcode.family));
-    ImGui::Text("Instruction: %s", family.c_str());
+    ImGui::Separator();
+
+    uint16_t pc_disassemble = pc_start;
+    ImGui::Text("Disassembly:");
+    for (int i = 0; i < 10; ++i) {
+        const auto opcode =
+                n_e_s::core::decode(nes_->mmu().read_byte(pc_disassemble));
+        const auto instruction_str = n_e_s::dis::disassemble(
+                pc_disassemble, nes_->mmu(), nes_->cpu_registers());
+        if (i == 0) {
+            ImGui::Text("%04hX: %s", pc_disassemble, instruction_str.c_str());
+        } else {
+            ImGui::TextDisabled("%04hX: %s", pc_disassemble, instruction_str.c_str());
+        }
+        pc_disassemble += n_e_s::dis::get_arg_count(opcode.address_mode) + 1;
+    }
+
+    ImGui::Separator();
 
     ImGui::Separator();
 

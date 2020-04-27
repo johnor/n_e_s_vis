@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
     nes_core
     GIT_REPOSITORY https://github.com/evilcorpltd/n_e_s.git
-    GIT_TAG 62773914aed8366a0bb400b21aa8c8fac1019b7f
+    GIT_TAG f78ad2ed36c2812c058cb0668de8e46e2f6a2581
 )
 FetchContent_MakeAvailable(nes_core)
 
@@ -32,6 +32,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         n_e_s_core
         n_e_s_nes
+        n_e_s_disassembler
         sfml-window
         sfml-system
         sfml-graphics
