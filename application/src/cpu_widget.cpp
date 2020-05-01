@@ -20,58 +20,69 @@ void CpuWidget::draw() {
     ImGui::Begin("Nes cpu");
 
     if (control_->is_running()) {
-        if (ImGui::Button("Pause")) {
+        if (ImGui::Button("Pause", {50.f, 0.f})) {
             control_->pause();
         }
     } else {
-        if (ImGui::Button("Run")) {
+        if (ImGui::Button("Run", {50.f, 0.f})) {
             control_->run();
         }
     }
+    ImGui::SameLine();
 
-    if (ImGui::Button("Stepi")) {
+    if (ImGui::Button("Reset", {50.f, 0.f})) {
+        nes_->reset();
+    }
+
+    ImGui::Spacing();
+
+    ImVec2 button_size{100.f, 0.f};
+    if (ImGui::Button("Stepi", button_size)) {
         control_->stepi();
     }
     ImGui::SameLine();
-    if (ImGui::Button("Stepi 1000")) {
+    if (ImGui::Button("Stepi 1000", button_size)) {
         for (int i = 0; i < 1000; ++i) {
             control_->stepi();
         }
     }
     ImGui::SameLine();
-    if (ImGui::Button("Stepi 10000")) {
+    if (ImGui::Button("Stepi 10000", button_size)) {
         for (int i = 0; i < 10000; ++i) {
             control_->stepi();
         }
     }
     ImGui::SameLine();
-    if (ImGui::Button("Stepi 100000")) {
+    if (ImGui::Button("Stepi 100000", button_size)) {
         for (int i = 0; i < 100000; ++i) {
             control_->stepi();
         }
     }
 
-    if (ImGui::Button("Step")) {
+    if (ImGui::Button("Step", button_size)) {
         control_->step();
     }
     ImGui::SameLine();
-    if (ImGui::Button("Step 10")) {
+    if (ImGui::Button("Step 10", button_size)) {
         for (int i = 0; i < 10; ++i) {
             control_->step();
         }
     }
     ImGui::SameLine();
-    if (ImGui::Button("Step 1000")) {
+    if (ImGui::Button("Step 1000", button_size)) {
         for (int i = 0; i < 1000; ++i) {
             control_->step();
         }
     }
 
-    if (ImGui::Button("Jump to address")) {
+    ImGui::Spacing();
+
+    if (ImGui::Button("Jump to addr", button_size)) {
         nes_->reset();
         nes_->cpu_registers().pc = jump_to_address_;
     }
     ImGui::SameLine();
+    ImGui::SetNextItemWidth(button_size.x);
     ImGui::InputScalar("",
             ImGuiDataType_U16,
             &jump_to_address_,
@@ -80,9 +91,7 @@ void CpuWidget::draw() {
             "%04hx",
             ImGuiInputTextFlags_CharsHexadecimal);
 
-    if (ImGui::Button("Reset")) {
-        nes_->reset();
-    }
+    ImGui::Spacing();
 
     ImGui::Text("Curr cycle: %" PRIu64, nes_->current_cycle());
 
@@ -111,6 +120,8 @@ void CpuWidget::draw() {
     const auto opcode = n_e_s::core::decode(nes_->mmu().read_byte(pc_start));
     const auto family = std::string(n_e_s::core::to_string(opcode.family));
     ImGui::Text("Instruction: %s", family.c_str());
+
+    ImGui::Separator();
 
     ImGui::Text("Stack contents:");
     if (ImGui::BeginChild("stack_content", {0, 200})) {
