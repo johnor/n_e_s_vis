@@ -183,10 +183,10 @@ PpuHelper::Sprite PpuHelper::get_sprite(uint8_t sprite_index) {
     nes_->ppu().write_byte(kOamAddr, oam_addr + 3u);
     const uint8_t x = nes_->ppu().read_byte(kOamData);
 
-    const bool flip_vertically = attribute & 0b1000'0000;
-    const bool flip_horizontally = attribute & 0b0100'0000;
-    const bool front_of_bkg = attribute & 0b0010'0000;
-    const uint8_t palette = attribute & 0b0000'0011;
+    const bool flip_vertically = attribute & 0b1000'0000u;
+    const bool flip_horizontally = attribute & 0b0100'0000u;
+    const bool front_of_bkg = attribute & 0b0010'0000u;
+    const uint8_t palette = attribute & 0b0000'0011u;
 
     return {.x = x,
             .y = y,

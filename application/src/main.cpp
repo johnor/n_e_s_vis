@@ -48,6 +48,7 @@ int main(int argc, char **argv) {
 
     ImGui::SFML::Init(window);
     ImGuiIO &io = ImGui::GetIO();
+    // NOLINTNEXTLINE(hicpp-signed-bitwise)
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigDockingNoSplit = true;
 

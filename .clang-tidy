@@ -19,7 +19,7 @@ Checks: '
   readability-else-after-return,
   readability-identifier-naming,
   readability-non-const-parameter'
-WarningsAsErrors: '*'
+WarningsAsErrors: '*,-hicpp-signed-bitwise'
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
 FormatStyle:     none

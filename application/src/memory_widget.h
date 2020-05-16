@@ -144,9 +144,9 @@ private:
             ImVec2 pos = ImGui::GetItemRectMin();
             pos.x -= 4;
             pos.y -= 4;
-            ImGui::GetWindowDrawList()->AddRectFilled(pos,
-                    ImVec2(pos.x + 24, pos.y + 24),
-                    IM_COL32(150, 150, 150, 100));
+            const auto color = IM_COL32(150u, 150u, 150u, 100u);
+            ImGui::GetWindowDrawList()->AddRectFilled(
+                    pos, ImVec2(pos.x + 24, pos.y + 24), color);
 
             ImGui::BeginTooltip();
             ImGui::Text("%04hX", address);
