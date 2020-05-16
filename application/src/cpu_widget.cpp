@@ -130,7 +130,8 @@ void CpuWidget::draw() {
         if (i == 0) {
             ImGui::Text("%04hX: %s", pc_disassemble, instruction_str.c_str());
         } else {
-            ImGui::TextDisabled("%04hX: %s", pc_disassemble, instruction_str.c_str());
+            ImGui::TextDisabled(
+                    "%04hX: %s", pc_disassemble, instruction_str.c_str());
         }
         pc_disassemble += n_e_s::dis::get_arg_count(opcode.address_mode) + 1;
     }
