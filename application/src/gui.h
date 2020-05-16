@@ -51,6 +51,7 @@ public:
     nesvis::PpuWidget ppu_widget;
     nesvis::MemoryWidget memory_widget;
 
+private:
     bool first_{true};
 };
 
