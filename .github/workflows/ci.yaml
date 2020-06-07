@@ -3,6 +3,19 @@ name: CI
 on: push
 
 jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run clang-format
+        uses: DoozyX/clang-format-lint-action@v0.5
+        with:
+          source: .
+          exclude: './build/*'
+          clangFormatVersion: 9
+
   ci:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
