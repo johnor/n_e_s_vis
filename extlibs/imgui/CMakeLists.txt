@@ -2,7 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
-    GIT_TAG 266dff9bed8d2b4efd103591f25299e38f6d7921 # v1.76 + docking
+    GIT_TAG a9626e1162c3742307553108aff8a443c20bb73c # latest docking
 )
 
 FetchContent_MakeAvailable(imgui)
