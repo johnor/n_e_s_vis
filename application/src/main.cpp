@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
             // CPU: every 12 master ticks
             // PPU: every 4
             // APU: every 24
-            constexpr size_t kNESClock = kMasterClock / 4;
+            constexpr size_t kNESClock = kMasterClock;
             constexpr size_t kTickPerFrame = kNESClock / kFps;
             if (control.is_running()) {
                 for (size_t i = 0; i < kTickPerFrame; ++i) {
