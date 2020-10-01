@@ -15,6 +15,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 
@@ -63,7 +64,8 @@ int main(int argc, char **argv) {
     try {
         if (argc > 1) {
             gui.log_widget.add("Loading rom from: " + std::string(argv[1]));
-            nes.load_rom(argv[1]);
+            std::ifstream fs(argv[1], std::ios::binary);
+            nes.load_rom(fs);
         }
 
         gui.ppu_widget.load_pattern_tables();
