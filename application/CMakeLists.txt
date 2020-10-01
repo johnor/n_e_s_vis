@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
     nes_core
     GIT_REPOSITORY https://github.com/evilcorpltd/n_e_s.git
-    GIT_TAG 09f1ad9bef5a7e9fcdaf20f462acdd4761f6a262
+    GIT_TAG 76b16ea70752220e9e71d0e69836c1473c06f51b
 )
 FetchContent_MakeAvailable(nes_core)
 
@@ -54,7 +54,7 @@ target_include_directories(${PROJECT_NAME}
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
 )
