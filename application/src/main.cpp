@@ -14,6 +14,8 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include <fmt/format.h>
+
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -64,7 +66,12 @@ int main(int argc, char **argv) {
     try {
         if (argc > 1) {
             gui.log_widget.add("Loading rom from: " + std::string(argv[1]));
+            fmt::print("Loading rom from: {}\n", argv[1]);
             std::ifstream fs(argv[1], std::ios::binary);
+            if (!fs) {
+                fmt::print(stderr, "Could not load file: {}\n", argv[1]);
+                return 1;
+            }
             nes.load_rom(fs);
         }
 
