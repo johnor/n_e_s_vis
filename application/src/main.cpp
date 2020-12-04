@@ -18,7 +18,6 @@
 
 #include <cmath>
 #include <fstream>
-#include <iostream>
 #include <stdexcept>
 
 namespace {
@@ -109,14 +108,15 @@ int main(int argc, char **argv) {
 
             const auto frame_time = delta_time;
             if (frame_time.asMilliseconds() > 1000 / kFps) {
-                std::cerr << "Things are running slowly: "
-                          << frame_time.asMilliseconds() << "ms" << std::endl;
+                fmt::print(stderr,
+                        "Things are running slowly: {}ms\n",
+                        frame_time.asMilliseconds());
             }
         }
 
         ImGui::SFML::Shutdown();
     } catch (const std::exception &e) {
-        std::cout << e.what() << std::endl;
+        fmt::print(stderr, "Caught exception: {}\n", e.what());
     }
 
     return 0;
