@@ -49,10 +49,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
       - name: Install (Linux)
         if: runner.os == 'Linux'
         run: |
-          echo "::add-path::/home/runner/.local/bin"
           python3 -m pip install pip --upgrade
           python3 -m pip install cmake==3.14.4 ninja==1.9.0.post1 --upgrade
 
@@ -61,12 +64,12 @@ jobs:
 
           if [ "${{ matrix.compiler }}" = "gcc" ]; then
             sudo apt-get install -y g++-${{ matrix.version }} g++-${{ matrix.version }}-multilib
-            echo "::set-env name=CC::gcc-${{ matrix.version }}"
-            echo "::set-env name=CXX::g++-${{ matrix.version }}"
+            echo "CC=gcc-${{ matrix.version }}" >> $GITHUB_ENV
+            echo "CXX=g++-${{ matrix.version }}" >> $GITHUB_ENV
           else
             sudo apt-get install -y clang-${{ matrix.version }} g++-multilib
-            echo "::set-env name=CC::clang-${{ matrix.version }}"
-            echo "::set-env name=CXX::clang++-${{ matrix.version }}"
+            echo "CC=clang-${{ matrix.version }}" >> $GITHUB_ENV
+            echo "CXX=clang++-${{ matrix.version }}" >> $GITHUB_ENV
           fi
 
       - name: Install (Windows)
