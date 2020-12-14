@@ -1,0 +1,93 @@
+cc_library(
+    name = "stb",
+    hdrs = glob([
+       "extlibs/headers/stb_image/stb_image.h",
+       "extlibs/headers/stb_image/stb_image_write.h",
+    ]),
+    strip_include_prefix = "extlibs/headers/stb_image/",
+)
+
+cc_library(
+    name = "ft2",
+    hdrs = glob([
+       "extlibs/headers/freetype2/**/*.h",
+    ]),
+    strip_include_prefix = "extlibs/headers/freetype2/",
+)
+
+cc_library(
+    name = "sfml-system",
+    srcs = glob([
+       "src/SFML/System/*.cpp",
+       "src/SFML/System/*.hpp",
+       "src/SFML/System/Unix/**/*.cpp",
+       "src/SFML/System/Unix/**/*.hpp",
+    ]),
+    hdrs = glob([
+       "include/SFML/System/**/*.h",
+       "include/SFML/System/**/*.hpp",
+    ]),
+    strip_include_prefix = "include/",
+    copts = ["-Iexternal/sfml/src/"],
+    linkopts = [
+       "-ludev",
+       "-pthread",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "sfml-window",
+    srcs = glob([
+       "src/SFML/Window/*.cpp",
+       "src/SFML/Window/*.hpp",
+       "src/SFML/Window/Unix/**/*.cpp",
+       "src/SFML/Window/Unix/**/*.hpp",
+    ], exclude=[
+        "src/SFML/Window/EglContext.cpp",
+        "src/SFML/Window/EglContext.hpp",
+        "src/SFML/Window/EglCheck.cpp",
+        "src/SFML/Window/EglCheck.hpp",
+    ]),
+    hdrs = glob([
+       "include/SFML/Window/**/*.h",
+       "include/SFML/Window/**/*.hpp",
+    ]),
+    strip_include_prefix = "include/",
+    copts = ["-Iexternal/sfml/src/"],
+    deps= [
+       ":sfml-system"
+    ],
+    linkopts = [
+       "-ludev",
+       "-lX11",
+       "-lXrandr",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "sfml-graphics",
+    srcs = glob([
+       "src/SFML/Graphics/*.cpp",
+       "src/SFML/Graphics/*.hpp",
+       "src/SFML/Graphics/Unix/**/*.cpp",
+       "src/SFML/Graphics/Unix/**/*.hpp",
+    ]),
+    hdrs = glob([
+       "include/SFML/Graphics/**/*.h",
+       "include/SFML/Graphics/**/*.hpp",
+    ]),
+    strip_include_prefix = "include/",
+    copts = ["-Iexternal/sfml/src/"],
+    deps= [
+      ":sfml-window",
+      ":stb",
+      ":ft2",
+    ],
+    linkopts = [
+      "-ludev",
+      "-pthread",
+    ],
+    visibility = ["//visibility:public"],
+)

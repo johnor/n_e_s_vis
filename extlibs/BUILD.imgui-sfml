@@ -1,0 +1,21 @@
+cc_library(
+    name = "imgui-sfml",
+    srcs = [
+      "imgui-SFML.cpp",
+      "imgui-SFML.h",
+      "imconfig-SFML.h",
+      "imgui-SFML_export.h",
+    ],
+    linkopts = [
+      "-lglfw",
+      "-lGLU",
+      "-lGL",
+    ],
+    deps = [
+      "@imgui",
+      "@sfml//:sfml-system",
+      "@sfml//:sfml-window",
+      "@sfml//:sfml-graphics",
+    ],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,14 @@
+cc_binary(
+    name = "nes_vis_app",
+    srcs = glob([
+        "src/**",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [
+      "@fmtlib",
+      "@imgui-sfml",
+      "@nes//nes",
+      "@nes//disassembler",
+    ],
+)
+
