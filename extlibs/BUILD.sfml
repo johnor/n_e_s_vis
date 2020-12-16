@@ -13,6 +13,9 @@ cc_library(
        "extlibs/headers/freetype2/**/*.h",
     ]),
     strip_include_prefix = "extlibs/headers/freetype2/",
+    linkopts = [
+      "-lfreetype",
+    ]
 )
 
 cc_library(
@@ -24,8 +27,10 @@ cc_library(
        "src/SFML/System/Unix/**/*.hpp",
     ]),
     hdrs = glob([
+       "include/SFML/*.hpp",
        "include/SFML/System/**/*.h",
        "include/SFML/System/**/*.hpp",
+       "include/SFML/System/**/*.inl",
     ]),
     strip_include_prefix = "include/",
     copts = ["-Iexternal/sfml/src/"],
@@ -46,8 +51,8 @@ cc_library(
     ], exclude=[
         "src/SFML/Window/EglContext.cpp",
         "src/SFML/Window/EglContext.hpp",
-        "src/SFML/Window/EglCheck.cpp",
-        "src/SFML/Window/EglCheck.hpp",
+        "src/SFML/Window/EGLCheck.cpp",
+        "src/SFML/Window/EGLCheck.hpp",
     ]),
     hdrs = glob([
        "include/SFML/Window/**/*.h",
@@ -59,9 +64,10 @@ cc_library(
        ":sfml-system"
     ],
     linkopts = [
-       "-ludev",
+       "-lGL",
        "-lX11",
        "-lXrandr",
+       "-ludev",
     ],
     visibility = ["//visibility:public"],
 )
@@ -76,6 +82,7 @@ cc_library(
     ]),
     hdrs = glob([
        "include/SFML/Graphics/**/*.h",
+       "include/SFML/Graphics/**/*.inl",
        "include/SFML/Graphics/**/*.hpp",
     ]),
     strip_include_prefix = "include/",
@@ -86,6 +93,7 @@ cc_library(
       ":ft2",
     ],
     linkopts = [
+      "-lGL",
       "-ludev",
       "-pthread",
     ],
