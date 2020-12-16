@@ -42,6 +42,12 @@ jobs:
             compiler: clang
             version: "9"
 
+          - name: ubuntu-18.04-clang-10-bazel
+            os: ubuntu-18.04
+            compiler: clang
+            version: "10"
+            bazel: true
+
           - name: windows-2019-cl
             os: windows-2019
             cmake-args: -A x64
@@ -72,16 +78,27 @@ jobs:
             echo "CXX=clang++-${{ matrix.version }}" >> $GITHUB_ENV
           fi
 
+          if [ "${{ matrix.bazel }}" = "true" ]; then
+            wget -LO bazelisk "https://github.com/bazelbuild/bazelisk/releases/download/v1.7.4/bazelisk-linux-amd64"
+            chmod +x bazelisk
+          fi
+
       - name: Install (Windows)
         if: runner.os == 'Windows'
         run: |
           python -m pip install ninja --upgrade
           python -m pip install cmake --upgrade
 
-      - name: Build and test
+      - name: Build and test (cmake)
+        if: ${{ ! matrix.bazel }}
         run: |
           ninja --version
           cmake --version
           cmake -S . -B build ${{ matrix.cmake-args }}
           cmake --build build
           (cd build && ctest)
+
+      - name: Build and test (bazel)
+        if: matrix.bazel
+        run: |
+          ./bazelisk build --config gnulike //...
