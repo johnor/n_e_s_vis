@@ -3,19 +3,30 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 cc_library(
     name = "stb",
     hdrs = glob([
-        "extlibs/headers/stb_image/*.h",
+        "extlibs/headers/stb_image/stb_image.h",
+        "extlibs/headers/stb_image/stb_image_write.h",
     ]),
     strip_include_prefix = "extlibs/headers/stb_image/",
 )
 
 cc_library(
     name = "ft2",
+    srcs = select({
+        "@bazel_tools//platforms:windows": [
+            "extlibs/libs-msvc/x64/freetype.lib",
+        ],
+        "@bazel_tools//platforms:linux": []
+    }),
     hdrs = glob([
         "extlibs/headers/freetype2/**/*.h",
     ]),
-    linkopts = [
-        "-lfreetype",
-    ],
+    linkopts = select({
+        "@bazel_tools//platforms:windows": [
+        ],
+        "@bazel_tools//platforms:linux": [
+            "-lfreetype",
+        ],
+    }),
     strip_include_prefix = "extlibs/headers/freetype2/",
 )
 
@@ -24,9 +35,16 @@ cc_library(
     srcs = glob([
         "src/SFML/System/*.cpp",
         "src/SFML/System/*.hpp",
-        "src/SFML/System/Unix/**/*.cpp",
-        "src/SFML/System/Unix/**/*.hpp",
-    ]),
+    ]) + select({
+        "@bazel_tools//platforms:windows": glob([
+            "src/SFML/System/Win32/**/*.cpp",
+            "src/SFML/System/Win32/**/*.hpp",
+        ]),
+        "@bazel_tools//platforms:linux": glob([
+            "src/SFML/System/Unix/**/*.cpp",
+            "src/SFML/System/Unix/**/*.hpp",
+        ]),
+    }),
     hdrs = glob([
         "include/SFML/*.hpp",
         "include/SFML/System/**/*.h",
@@ -34,10 +52,16 @@ cc_library(
         "include/SFML/System/**/*.inl",
     ]),
     copts = ["-Iexternal/sfml/src/"],
-    linkopts = [
-        "-ludev",
-        "-pthread",
-    ],
+    defines = ["SFML_STATIC"],
+    linkopts = select({
+        "@bazel_tools//platforms:windows": [
+            "-DEFAULTLIB:winmm",
+        ],
+        "@bazel_tools//platforms:linux": [
+            "-ludev",
+            "-pthread",
+        ],
+    }),
     strip_include_prefix = "include/",
     visibility = ["//visibility:public"],
 )
@@ -48,8 +72,6 @@ cc_library(
         [
             "src/SFML/Window/*.cpp",
             "src/SFML/Window/*.hpp",
-            "src/SFML/Window/Unix/**/*.cpp",
-            "src/SFML/Window/Unix/**/*.hpp",
         ],
         exclude = [
             "src/SFML/Window/EglContext.cpp",
@@ -57,18 +79,41 @@ cc_library(
             "src/SFML/Window/EGLCheck.cpp",
             "src/SFML/Window/EGLCheck.hpp",
         ],
-    ),
+    ) + select({
+        "@bazel_tools//platforms:windows": glob([
+            "src/SFML/Window/Win32/**/*.cpp",
+            "src/SFML/Window/Win32/**/*.hpp",
+        ]),
+        "@bazel_tools//platforms:linux": glob([
+            "src/SFML/Window/Unix/**/*.cpp",
+            "src/SFML/Window/Unix/**/*.hpp",
+        ]),
+    }),
     hdrs = glob([
         "include/SFML/Window/**/*.h",
         "include/SFML/Window/**/*.hpp",
     ]),
     copts = ["-Iexternal/sfml/src/"],
-    linkopts = [
-        "-lGL",
-        "-lX11",
-        "-lXrandr",
-        "-ludev",
+    defines = [
+        "SFML_STATIC",
+        "UNICODE",
+        "_UNICODE",
     ],
+    linkopts = select({
+        "@bazel_tools//platforms:windows": [
+            "-DEFAULTLIB:advapi32",
+            "-DEFAULTLIB:gdi32",
+            "-DEFAULTLIB:opengl32",
+            "-DEFAULTLIB:user32",
+            "-DEFAULTLIB:winmm",
+        ],
+        "@bazel_tools//platforms:linux": [
+            "-lGL",
+            "-lX11",
+            "-lXrandr",
+            "-ludev",
+        ],
+    }),
     strip_include_prefix = "include/",
     visibility = ["//visibility:public"],
     deps = [
@@ -81,20 +126,33 @@ cc_library(
     srcs = glob([
         "src/SFML/Graphics/*.cpp",
         "src/SFML/Graphics/*.hpp",
-        "src/SFML/Graphics/Unix/**/*.cpp",
-        "src/SFML/Graphics/Unix/**/*.hpp",
-    ]),
+    ]) + select({
+        "@bazel_tools//platforms:windows": glob([
+            "src/SFML/Graphics/Win32/**/*.cpp",
+            "src/SFML/Graphics/Win32/**/*.hpp",
+        ]),
+        "@bazel_tools//platforms:linux": glob([
+            "src/SFML/Graphics/Unix/**/*.cpp",
+            "src/SFML/Graphics/Unix/**/*.hpp",
+        ]),
+    }),
     hdrs = glob([
         "include/SFML/Graphics/**/*.h",
         "include/SFML/Graphics/**/*.inl",
         "include/SFML/Graphics/**/*.hpp",
     ]),
     copts = ["-Iexternal/sfml/src/"],
-    linkopts = [
-        "-lGL",
-        "-ludev",
-        "-pthread",
-    ],
+    defines = ["SFML_STATIC"],
+    linkopts = select({
+        "@bazel_tools//platforms:windows": [
+            "-DEFAULTLIB:opengl32",
+        ],
+        "@bazel_tools//platforms:linux": [
+            "-lGL",
+            "-ludev",
+            "-pthread",
+        ],
+    }),
     strip_include_prefix = "include/",
     visibility = ["//visibility:public"],
     deps = [
