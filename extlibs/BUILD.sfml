@@ -1,3 +1,5 @@
+load("@nes_vis//extlibs:no_undefined.bzl", "cc_library")
+
 cc_library(
     name = "stb",
     hdrs = glob([
