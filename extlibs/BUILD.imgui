@@ -1,12 +1,14 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 cc_library(
     name = "imgui",
     srcs = glob([
-       "*.cpp",
-       "misc/cpp/*.cpp",
+        "*.cpp",
+        "misc/cpp/*.cpp",
     ]),
     hdrs = glob([
-       "*.h",
-       "misc/cpp/*.h",
+        "*.h",
+        "misc/cpp/*.h",
     ]),
     includes = ["."],
     visibility = ["//visibility:public"],

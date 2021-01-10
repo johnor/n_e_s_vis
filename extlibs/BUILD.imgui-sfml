@@ -1,19 +1,21 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 cc_library(
     name = "imgui-sfml",
     srcs = [
-      "imgui-SFML.cpp",
-      "imgui-SFML.h",
-      "imconfig-SFML.h",
-      "imgui-SFML_export.h",
+        "imconfig-SFML.h",
+        "imgui-SFML.cpp",
+        "imgui-SFML.h",
+        "imgui-SFML_export.h",
     ],
     linkopts = [
-      "-lGL",
-    ],
-    deps = [
-      "@imgui",
-      "@sfml//:sfml-system",
-      "@sfml//:sfml-window",
-      "@sfml//:sfml-graphics",
+        "-lGL",
     ],
     visibility = ["//visibility:public"],
+    deps = [
+        "@imgui",
+        "@sfml//:sfml-graphics",
+        "@sfml//:sfml-system",
+        "@sfml//:sfml-window",
+    ],
 )

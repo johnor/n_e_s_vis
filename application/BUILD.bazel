@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
 cc_binary(
     name = "nes_vis_app",
     srcs = glob([
@@ -5,10 +7,9 @@ cc_binary(
     ]),
     visibility = ["//visibility:public"],
     deps = [
-      "@fmtlib",
-      "@imgui-sfml",
-      "@nes//nes",
-      "@nes//disassembler",
+        "@fmtlib",
+        "@imgui-sfml",
+        "@nes//disassembler",
+        "@nes//nes",
     ],
 )
-
