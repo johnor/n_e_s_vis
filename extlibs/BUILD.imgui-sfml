@@ -8,9 +8,14 @@ cc_library(
         "imgui-SFML.h",
         "imgui-SFML_export.h",
     ],
-    linkopts = [
-        "-lGL",
-    ],
+    linkopts = select({
+        "@bazel_tools//platforms:windows": [
+            "-DEFAULTLIB:opengl32",
+        ],
+        "//conditions:default": [
+            "-lGL",
+        ],
+    }),
     visibility = ["//visibility:public"],
     deps = [
         "@imgui",
