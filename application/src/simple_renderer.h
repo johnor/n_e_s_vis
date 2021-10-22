@@ -16,14 +16,13 @@ class Screen;
 
 class SimpleRenderer {
 public:
-    SimpleRenderer(n_e_s::nes::Nes *nes, PpuHelper *ppu_helper, Screen *screen);
+    SimpleRenderer(n_e_s::nes::Nes *nes, PpuHelper *ppu_helper);
 
-    void draw();
+    void render(Screen *screen);
 
 private:
     n_e_s::nes::Nes *nes_{nullptr};
     PpuHelper *ppu_helper_{nullptr};
-    Screen *screen_{nullptr};
 };
 
 } // namespace nesvis
