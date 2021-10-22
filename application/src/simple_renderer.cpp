@@ -7,12 +7,10 @@
 
 namespace nesvis {
 
-SimpleRenderer::SimpleRenderer(n_e_s::nes::Nes *nes,
-        PpuHelper *ppu_helper,
-        Screen *screen)
-        : nes_{nes}, ppu_helper_{ppu_helper}, screen_{screen} {}
+SimpleRenderer::SimpleRenderer(n_e_s::nes::Nes *nes, PpuHelper *ppu_helper)
+        : nes_{nes}, ppu_helper_{ppu_helper} {}
 
-void SimpleRenderer::draw() {
+void SimpleRenderer::render(Screen *screen) {
     const int bkg_pattern_table = nes_->ppu_registers().ctrl.is_set(4u) ? 1 : 0;
 
     for (uint16_t cell_y = 0; cell_y < 30; ++cell_y) {
@@ -36,7 +34,7 @@ void SimpleRenderer::draw() {
                             attr_cell.palette, color_index);
                     const int pixel_x = cell_x * 8 + pattern_x;
                     const int pixel_y = cell_y * 8 + pattern_y;
-                    screen_->set_pixel(pixel_x, pixel_y, color);
+                    screen->set_pixel(pixel_x, pixel_y, color);
                 }
             }
         }
@@ -64,7 +62,7 @@ void SimpleRenderer::draw() {
                             sprite.palette, color_index);
                     const int pixel_x = sprite.x + pattern_x;
                     const int pixel_y = sprite.y + pattern_y;
-                    screen_->set_pixel(pixel_x, pixel_y, color);
+                    screen->set_pixel(pixel_x, pixel_y, color);
                 }
             }
         }

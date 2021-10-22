@@ -5,6 +5,8 @@
 #include "simple_renderer.h"
 
 #include "nes/core/ines_controller.h"
+#include "nes/core/ippu.h"
+#include "nes/core/pixel.h"
 #include "nes/nes.h"
 
 #include "imgui-SFML.h"
@@ -88,7 +90,7 @@ int main(int argc, char **argv) {
     nesvis::PpuHelper ppu_helper(&nes);
     nesvis::Gui gui(&nes, &ppu_helper, &control);
 
-    nesvis::SimpleRenderer renderer(&nes, &ppu_helper, &screen);
+    nesvis::SimpleRenderer simple_renderer(&nes, &ppu_helper);
 
     try {
         if (argc > 1) {
@@ -115,13 +117,6 @@ int main(int argc, char **argv) {
 
             window.clear();
 
-            renderer.draw();
-            gui.draw();
-            screen.draw(window);
-
-            ImGui::SFML::Render(window);
-            window.display();
-
             // robinlinden/desunes
             constexpr size_t kMasterClock = 21'477'272; // Hz
             // Tick rates:
@@ -132,15 +127,32 @@ int main(int argc, char **argv) {
             constexpr size_t kTickPerFrame = kNESClock / kFps;
             if (control.is_running()) {
                 for (size_t i = 0; i < kTickPerFrame; ++i) {
-                    nes.execute();
+                    const auto pixel = nes.execute();
+                    if (pixel && !control.use_simple_renderer()) {
+                        const auto color = pixel->color;
+                        screen.set_pixel(pixel->x,
+                                pixel->y,
+                                sf::Color(color.r, color.g, color.b));
+                    }
                 }
             }
+
+            if (control.use_simple_renderer()) {
+                simple_renderer.render(&screen);
+            }
+
+            gui.draw();
+            screen.draw(window);
+
+            ImGui::SFML::Render(window);
+            window.display();
 
             const auto frame_time = delta_time;
             if (frame_time.asMilliseconds() > 1000 / kFps) {
                 fmt::print(stderr,
-                        "Things are running slowly: {}ms\n",
-                        frame_time.asMilliseconds());
+                        "Things are running slowly: {}ms - {}ms\n",
+                        frame_time.asMilliseconds(),
+                        1000 / kFps);
             }
         }
 

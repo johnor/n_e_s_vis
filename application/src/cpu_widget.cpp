@@ -37,6 +37,22 @@ void CpuWidget::draw() {
         nes_->reset();
     }
 
+    const char *items[] = {"Simple", "Ppu"};
+    const char *preview_value = items[control_->use_simple_renderer() ? 0 : 1];
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Renderer: ");
+    ImGui::SameLine();
+    if (ImGui::BeginCombo("##renderer", preview_value)) {
+        if (ImGui::Selectable(items[0], control_->use_simple_renderer())) {
+            control_->use_simple_renderer(true);
+        }
+        if (ImGui::Selectable(items[1], !control_->use_simple_renderer())) {
+            control_->use_simple_renderer(false);
+        }
+        ImGui::EndCombo();
+    }
+
     ImGui::Spacing();
 
     ImVec2 button_size{100.f, 0.f};

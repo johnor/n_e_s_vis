@@ -17,6 +17,7 @@ public:
     void draw();
 
 private:
+    int renderer_{0};
     uint16_t jump_to_address_{0u};
     n_e_s::nes::Nes *nes_{nullptr};
     Control *control_{nullptr};

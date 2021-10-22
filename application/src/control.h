@@ -11,15 +11,23 @@ public:
 
     bool is_running() const {
         return is_running_;
-    };
+    }
+
+    bool use_simple_renderer() const {
+        return use_simple_renderer_;
+    }
+
+    void use_simple_renderer(bool use) {
+        use_simple_renderer_ = use;
+    }
 
     void pause() {
         is_running_ = false;
-    };
+    }
 
     void run() {
         is_running_ = true;
-    };
+    }
 
     // Runs a single step in the ppu/cpu
     void stepi() {
@@ -36,6 +44,7 @@ public:
 
 private:
     bool is_running_{true};
+    bool use_simple_renderer_{false};
     n_e_s::nes::Nes *nes_{nullptr};
 };
 
