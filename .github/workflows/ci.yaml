@@ -27,25 +27,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        name:
-          - ubuntu-18.04-gcc-9
-          - ubuntu-18.04-clang-9
-          - windows-2019-cl
         include:
-          - name: ubuntu-18.04-gcc-9
-            os: ubuntu-18.04
+          - name: ubuntu-20.04-gcc-9
+            os: ubuntu-20.04
             compiler: gcc
-            version: "9"
-
-          - name: ubuntu-18.04-clang-9
-            os: ubuntu-18.04
-            compiler: clang
-            version: "9"
-
-          - name: ubuntu-18.04-clang-10-bazel
-            os: ubuntu-18.04
-            compiler: clang
             version: "10"
+
+          - name: ubuntu-20.04-clang-13
+            os: ubuntu-20.04
+            compiler: clang
+            version: "12"
+
+          - name: ubuntu-20.04-clang-13-bazel
+            os: ubuntu-20.04
+            compiler: clang
+            version: "12"
             bazel: true
 
           - name: windows-2019-cl
@@ -73,7 +69,8 @@ jobs:
             echo "CC=gcc-${{ matrix.version }}" >> $GITHUB_ENV
             echo "CXX=g++-${{ matrix.version }}" >> $GITHUB_ENV
           else
-            sudo apt-get install -y clang-${{ matrix.version }} g++-multilib
+            curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s ${{ matrix.version }}
+            sudo apt-get install -y clang-tidy-${{ matrix.version }} g++-multilib
             echo "CC=clang-${{ matrix.version }}" >> $GITHUB_ENV
             echo "CXX=clang++-${{ matrix.version }}" >> $GITHUB_ENV
           fi
