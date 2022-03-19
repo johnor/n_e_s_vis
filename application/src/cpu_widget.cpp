@@ -3,6 +3,7 @@
 #include "control.h"
 #include "nes/core/immu.h"
 #include "nes/core/imos6502.h"
+#include "nes/core/invalid_address.h"
 #include "nes/core/opcode.h"
 #include "nes/disassembler.h"
 #include "nes/nes.h"
@@ -125,13 +126,18 @@ void CpuWidget::draw() {
     for (int i = 0; i < 10; ++i) {
         const auto opcode =
                 n_e_s::core::decode(nes_->mmu().read_byte(pc_disassemble));
-        const auto instruction_str = n_e_s::dis::disassemble(
-                pc_disassemble, nes_->mmu(), nes_->cpu_registers());
-        if (i == 0) {
-            ImGui::Text("%04hX: %s", pc_disassemble, instruction_str.c_str());
-        } else {
-            ImGui::TextDisabled(
-                    "%04hX: %s", pc_disassemble, instruction_str.c_str());
+        try {
+            const auto instruction_str = n_e_s::dis::disassemble(
+                    pc_disassemble, nes_->mmu(), nes_->cpu_registers());
+            if (i == 0) {
+                ImGui::Text(
+                        "%04hX: %s", pc_disassemble, instruction_str.c_str());
+            } else {
+                ImGui::TextDisabled(
+                        "%04hX: %s", pc_disassemble, instruction_str.c_str());
+            }
+        } catch (const n_e_s::core::InvalidAddress &e) {
+            ImGui::TextDisabled("%04hX: ----", pc_disassemble);
         }
         pc_disassemble += n_e_s::dis::get_arg_count(opcode.address_mode) + 1;
     }
