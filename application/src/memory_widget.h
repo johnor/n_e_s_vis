@@ -28,7 +28,7 @@ public:
         if (ImGui::BeginTabItem("Cpu")) {
             draw_tab("Cpu",
                     cpu_mem_labels_,
-                    0x5000,
+                    0xFFFF,
                     [this](uint16_t address) -> uint8_t {
                         return nes_->mmu().read_byte(address);
                     });
