@@ -28,17 +28,17 @@ http_archive(
 new_git_repository(
     name = "imgui",
     build_file = "@nes_vis//extlibs:BUILD.imgui",
-    commit = "958e58b06b35ca845a2e8f5bd6032debd3cec0c0",
+    commit = "377b864bb4a9ed9a25674b04f64f63baf221060d",
     remote = "https://github.com/ocornut/imgui.git",
-    shallow_since = "1601551988 +0200",
+    shallow_since = "1648052494 +0100",
 )
 
 new_git_repository(
     name = "imgui-sfml",
     build_file = "@nes_vis//extlibs:BUILD.imgui-sfml",
-    commit = "5ab660a13bc997225587eea88755f22f999f7ba9",
+    commit = "48d527d0ca444aa546108103cc0ad07b0949bdd6",
     remote = "https://github.com/eliasdaler/imgui-sfml.git",
-    shallow_since = "1598978060 +0300",
+    shallow_since = "1648849033 +0300",
 )
 
 git_repository(

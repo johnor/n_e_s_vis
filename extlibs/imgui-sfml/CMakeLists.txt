@@ -2,7 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(imgui-sfml
     GIT_REPOSITORY https://github.com/eliasdaler/imgui-sfml.git
-    GIT_TAG        5ab660a13bc997225587eea88755f22f999f7ba9
+    GIT_TAG 48d527d0ca444aa546108103cc0ad07b0949bdd6
 )
 
 FetchContent_GetProperties(imgui
