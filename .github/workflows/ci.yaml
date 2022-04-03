@@ -82,7 +82,7 @@ jobs:
           cmake --build build
           (cd build && ctest)
 
-      - name: Build and test (bazel)
+      - name: Build (bazel)
         if: matrix.bazel
         run: |
-          ./bazelisk build --config gnulike //...
+          ./bazelisk build //...
