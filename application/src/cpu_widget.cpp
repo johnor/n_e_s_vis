@@ -3,6 +3,7 @@
 #include "control.h"
 #include "nes/core/immu.h"
 #include "nes/core/imos6502.h"
+#include "nes/core/ines_controller.h"
 #include "nes/core/invalid_address.h"
 #include "nes/core/opcode.h"
 #include "nes/disassembler.h"
@@ -144,8 +145,6 @@ void CpuWidget::draw() {
 
     ImGui::Separator();
 
-    ImGui::Separator();
-
     ImGui::Text("Stack contents:");
     if (ImGui::BeginChild("stack_content", {0, 200})) {
         for (int i = reg.sp + 1; i <= 0xFF; ++i) {
@@ -153,6 +152,20 @@ void CpuWidget::draw() {
         }
     }
     ImGui::EndChild();
+
+    ImGui::Separator();
+    ImGui::Text("Controller 1:");
+
+    auto &ctrl1 = nes_->controller1();
+    using n_e_s::core::INesController;
+    ImGui::Text("A: %d", ctrl1.get(INesController::Button::A));
+    ImGui::Text("B: %d", ctrl1.get(INesController::Button::B));
+    ImGui::Text("Left: %d", ctrl1.get(INesController::Button::Left));
+    ImGui::Text("Right: %d", ctrl1.get(INesController::Button::Right));
+    ImGui::Text("Up: %d", ctrl1.get(INesController::Button::Up));
+    ImGui::Text("Down: %d", ctrl1.get(INesController::Button::Down));
+    ImGui::Text("Start: %d", ctrl1.get(INesController::Button::Start));
+    ImGui::Text("Select: %d", ctrl1.get(INesController::Button::Select));
 
     ImGui::End();
 }
