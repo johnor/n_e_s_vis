@@ -37,7 +37,7 @@ void PpuWidget::draw() {
 
     ImGui::Text("%s: %02hhX", "ctrl", reg.ctrl);
     ImGui::SameLine();
-    ImGui::Text("%s: %02hhX", "mask", reg.mask);
+    ImGui::Text("%s: %02hhX", "mask", reg.mask.value());
 
     ImGui::Text("%s: %02hhX", "status", reg.status);
 
