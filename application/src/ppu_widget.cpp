@@ -46,10 +46,6 @@ void PpuWidget::draw() {
     ImGui::Text("%s: %02hhX", "scroll", reg.fine_x_scroll);
 
     ImGui::Text("%s: %04hX", "vram_addr", reg.vram_addr.value());
-    ImGui::SameLine();
-    ImGui::Text("%s: %02hhX",
-            "mem(vram_addr)",
-            try_get_ppu_mem(reg.vram_addr.value()));
 
     if (ImGui::CollapsingHeader("Pattern tables")) {
         draw_patterntables();
