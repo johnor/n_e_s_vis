@@ -4,6 +4,7 @@
 #include "screen.h"
 #include "simple_renderer.h"
 
+#include "nes/core/ines_controller.h"
 #include "nes/nes.h"
 
 #include "imgui-SFML.h"
@@ -13,6 +14,7 @@
 #include <SFML/System.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 #include <fmt/format.h>
 
@@ -38,6 +40,32 @@ void poll_events(sf::RenderWindow &window) {
             window.close();
         }
     }
+}
+
+void handle_keys(n_e_s::core::INesController &controller1) {
+    ImGuiIO &io = ImGui::GetIO();
+    if (io.WantCaptureKeyboard) {
+        return;
+    }
+    using n_e_s::core::INesController;
+    controller1.set(INesController::Button::A,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::A));
+    controller1.set(INesController::Button::B,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::S));
+
+    controller1.set(INesController::Button::Left,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Left));
+    controller1.set(INesController::Button::Right,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Right));
+    controller1.set(INesController::Button::Up,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Up));
+    controller1.set(INesController::Button::Down,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Down));
+
+    controller1.set(INesController::Button::Start,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Q));
+    controller1.set(INesController::Button::Select,
+            sf::Keyboard::isKeyPressed(sf::Keyboard::W));
 }
 
 } // namespace
@@ -82,6 +110,8 @@ int main(int argc, char **argv) {
 
             const sf::Time delta_time = delta_clock.restart();
             ImGui::SFML::Update(window, delta_time);
+
+            handle_keys(nes.controller1());
 
             window.clear();
 
