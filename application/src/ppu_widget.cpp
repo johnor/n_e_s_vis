@@ -36,8 +36,17 @@ void PpuWidget::draw() {
     const auto reg = nes_->ppu_registers();
 
     ImGui::Text("%s: %02hhX", "ctrl", reg.ctrl);
-    ImGui::SameLine();
     ImGui::Text("%s: %02hhX", "mask", reg.mask.value());
+    if (ImGui::IsItemHovered()) {
+        ImGui::BeginTooltip();
+        ImGui::Text("Mask");
+        ImGui::Text("Greyscale: %d", reg.mask.is_set(0));
+        ImGui::Text("Show bkg left: %d", reg.mask.is_set(1));
+        ImGui::Text("Show sprites left: %d", reg.mask.is_set(2));
+        ImGui::Text("Show bkg: %d", reg.mask.is_set(3));
+        ImGui::Text("Show sprites: %d", reg.mask.is_set(4));
+        ImGui::EndTooltip();
+    }
 
     ImGui::Text("%s: %02hhX", "status", reg.status);
 
