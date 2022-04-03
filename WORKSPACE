@@ -12,9 +12,9 @@ load(
 
 git_repository(
     name = "nes",
-    commit = "7aa90a7c54475a52e2d85cd1aa09e8f2e271620b",
+    commit = "04ee440699c45129fb21fc0ac374d0374e75003c",
     remote = "https://github.com/evilcorpltd/n_e_s",
-    shallow_since = "1644853527 +0100",
+    shallow_since = "1648627894 +0200",
 )
 
 http_archive(
