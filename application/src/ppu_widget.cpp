@@ -35,7 +35,7 @@ void PpuWidget::draw() {
 
     const auto reg = nes_->ppu_registers();
 
-    ImGui::Text("%s: %02hhX", "ctrl", reg.ctrl);
+    ImGui::Text("%s: %02hhX", "ctrl", reg.ctrl.value());
     ImGui::Text("%s: %02hhX", "mask", reg.mask.value());
     if (ImGui::IsItemHovered()) {
         ImGui::BeginTooltip();
@@ -48,7 +48,7 @@ void PpuWidget::draw() {
         ImGui::EndTooltip();
     }
 
-    ImGui::Text("%s: %02hhX", "status", reg.status);
+    ImGui::Text("%s: %02hhX", "status", reg.status.value());
 
     ImGui::Text("%s: %02hhX", "oamaddr", reg.oamaddr);
 
@@ -104,7 +104,7 @@ void PpuWidget::draw_patterntables() {
 
 void PpuWidget::draw_nametables() {
     const auto reg = nes_->ppu_registers();
-    const int pattern_table = reg.ctrl & 0x10u ? 1 : 0;
+    const int pattern_table = reg.ctrl.is_set(4u) ? 1 : 0;
     ImGui::Text("%s: %i", "Pattern table used: ", pattern_table);
 
     if (ImGui::BeginTabBar("MyTabBar")) {
@@ -121,7 +121,7 @@ void PpuWidget::draw_nametables() {
 }
 void PpuWidget::draw_nametable(uint16_t nametable) {
     const auto reg = nes_->ppu_registers();
-    const int pattern_table = reg.ctrl & 0x10u ? 1 : 0;
+    const int pattern_table = reg.ctrl.is_set(4u) ? 1 : 0;
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
     for (uint16_t y = 0; y < 30; ++y) {
@@ -154,7 +154,7 @@ void PpuWidget::draw_nametable(uint16_t nametable) {
 
 void PpuWidget::draw_sprites() {
     const auto reg = nes_->ppu_registers();
-    const int sprite_pattern_table = reg.ctrl & 0b000'1000u ? 1 : 0;
+    const int sprite_pattern_table = reg.ctrl.is_set(3u) ? 1 : 0;
     ImGui::Text("%s: %i", "Sprite pattern table: ", sprite_pattern_table);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
     for (uint8_t index = 0; index < 64; ++index) {

@@ -13,7 +13,7 @@ SimpleRenderer::SimpleRenderer(n_e_s::nes::Nes *nes,
         : nes_{nes}, ppu_helper_{ppu_helper}, screen_{screen} {}
 
 void SimpleRenderer::draw() {
-    const int bkg_pattern_table = nes_->ppu_registers().ctrl & 0x10u ? 1 : 0;
+    const int bkg_pattern_table = nes_->ppu_registers().ctrl.is_set(4u) ? 1 : 0;
 
     for (uint16_t cell_y = 0; cell_y < 30; ++cell_y) {
         for (uint16_t cell_x = 0; cell_x < 32; ++cell_x) {
@@ -43,7 +43,7 @@ void SimpleRenderer::draw() {
     }
 
     const int sprite_pattern_table =
-            nes_->ppu_registers().ctrl & 0b000'1000 ? 1 : 0;
+            nes_->ppu_registers().ctrl.is_set(3u) ? 1 : 0;
     for (uint8_t sprite_index = 0; sprite_index < 64; ++sprite_index) {
         const auto sprite = ppu_helper_->get_sprite(sprite_index);
 
