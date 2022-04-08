@@ -36,10 +36,25 @@ void PpuWidget::draw() {
     const auto reg = nes_->ppu_registers();
 
     ImGui::Text("%s: %02hhX", "ctrl", reg.ctrl.value());
+    if (ImGui::IsItemHovered()) {
+        ImGui::BeginTooltip();
+        ImGui::Text("Ctrl: 0x2000");
+        ImGui::Text("Nametable address: %d:%d",
+                reg.ctrl.is_set(0),
+                reg.ctrl.is_set(1));
+        ImGui::Text("Vram increment: %d", reg.ctrl.is_set(2));
+        ImGui::Text("Sprite pattern table address: %d", reg.ctrl.is_set(3));
+        ImGui::Text("Background pattern table address: %d", reg.ctrl.is_set(4));
+        ImGui::Text("Sprite size: %d", reg.ctrl.is_set(5));
+        ImGui::Text("Ppu master/slave select: %d", reg.ctrl.is_set(6));
+        ImGui::Text("Generate NMI: %d", reg.ctrl.is_set(7));
+        ImGui::EndTooltip();
+    }
+
     ImGui::Text("%s: %02hhX", "mask", reg.mask.value());
     if (ImGui::IsItemHovered()) {
         ImGui::BeginTooltip();
-        ImGui::Text("Mask");
+        ImGui::Text("Mask: 0x2001");
         ImGui::Text("Greyscale: %d", reg.mask.is_set(0));
         ImGui::Text("Show bkg left: %d", reg.mask.is_set(1));
         ImGui::Text("Show sprites left: %d", reg.mask.is_set(2));
