@@ -5,3 +5,7 @@ test --test_verbose_timeout_warnings=true
 
 build:linux --cxxopt="-std=c++2a"
 build:windows --cxxopt="/std:c++latest"
+
+build:lto --copt=-flto
+build:lto --cxxopt=-flto
+build:lto --linkopt=-flto
