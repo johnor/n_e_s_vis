@@ -1,3 +1,10 @@
 .git/
 build/
 build-clang/
+
+/compile_commands.json
+/external
+
+# For clangd, required to be here by hedronvision/bazel-compile-commands-extractor.
+# IDE files in general should go in .git/info/exclude.
+/.cache/
