@@ -31,8 +31,8 @@ jobs:
             version: "12"
             bazel: true
 
-          - name: windows-2019-cl
-            os: windows-2019
+          - name: windows-2022-cl
+            os: windows-2022
             cmake-args: -A x64
 
     steps:
