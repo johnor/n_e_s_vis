@@ -158,6 +158,7 @@ cc_library(
     deps = [
         ":ft2",
         ":sfml-window",
+        ":sfml-system",
         ":stb",
     ],
 )
