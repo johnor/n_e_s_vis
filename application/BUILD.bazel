@@ -8,8 +8,13 @@ cc_binary(
     visibility = ["//visibility:public"],
     deps = [
         "@fmtlib",
+        "@imgui",
         "@imgui-sfml",
+        "@nes//core",
         "@nes//disassembler",
         "@nes//nes",
+        "@sfml//:sfml-graphics",
+        "@sfml//:sfml-system",
+        "@sfml//:sfml-window",
     ],
 )

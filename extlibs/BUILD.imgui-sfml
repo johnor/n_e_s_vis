@@ -2,10 +2,12 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
     name = "imgui-sfml",
-    srcs = [
-        "imconfig-SFML.h",
-        "imgui-SFML.cpp",
+    hdrs = [
         "imgui-SFML.h",
+        "imconfig-SFML.h",
+    ],
+    srcs = [
+        "imgui-SFML.cpp",
         "imgui-SFML_export.h",
     ],
     linkopts = select({
