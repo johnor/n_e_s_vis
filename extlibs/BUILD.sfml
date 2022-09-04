@@ -34,7 +34,6 @@ cc_library(
     name = "sfml-system",
     srcs = glob([
         "src/SFML/System/*.cpp",
-        "src/SFML/System/*.hpp",
     ]) + select({
         "@bazel_tools//platforms:windows": glob([
             "src/SFML/System/Win32/**/*.cpp",
@@ -47,7 +46,6 @@ cc_library(
     }),
     hdrs = glob([
         "include/SFML/*.hpp",
-        "include/SFML/System/**/*.h",
         "include/SFML/System/**/*.hpp",
         "include/SFML/System/**/*.inl",
     ]),
@@ -90,8 +88,7 @@ cc_library(
         ]),
     }),
     hdrs = glob([
-        "include/SFML/Window/**/*.h",
-        "include/SFML/Window/**/*.hpp",
+        "include/SFML/Window/**/*",
     ]),
     copts = ["-Iexternal/sfml/src/"],
     defines = [
@@ -126,20 +123,9 @@ cc_library(
     srcs = glob([
         "src/SFML/Graphics/*.cpp",
         "src/SFML/Graphics/*.hpp",
-    ]) + select({
-        "@bazel_tools//platforms:windows": glob([
-            "src/SFML/Graphics/Win32/**/*.cpp",
-            "src/SFML/Graphics/Win32/**/*.hpp",
-        ]),
-        "@bazel_tools//platforms:linux": glob([
-            "src/SFML/Graphics/Unix/**/*.cpp",
-            "src/SFML/Graphics/Unix/**/*.hpp",
-        ]),
-    }),
+    ]),
     hdrs = glob([
-        "include/SFML/Graphics/**/*.h",
-        "include/SFML/Graphics/**/*.inl",
-        "include/SFML/Graphics/**/*.hpp",
+        "include/SFML/Graphics/**/*",
     ]),
     copts = ["-Iexternal/sfml/src/"],
     defines = ["SFML_STATIC"],
