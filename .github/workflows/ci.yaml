@@ -20,13 +20,13 @@ jobs:
             compiler: gcc
             version: "12"
 
-          - name: ubuntu-20.04-clang-14
-            os: ubuntu-20.04
+          - name: ubuntu-22.04-clang-14
+            os: ubuntu-22.04
             compiler: clang
             version: "14"
 
-          - name: ubuntu-20.04-clang-14-bazel
-            os: ubuntu-20.04
+          - name: ubuntu-22.04-clang-14-bazel
+            os: ubuntu-22.04
             compiler: clang
             version: "14"
             bazel: true
@@ -62,11 +62,6 @@ jobs:
             echo "CXX=clang++-${{ matrix.version }}" >> $GITHUB_ENV
           fi
 
-          if [ "${{ matrix.bazel }}" = "true" ]; then
-            wget -LO bazelisk "https://github.com/bazelbuild/bazelisk/releases/download/v1.7.4/bazelisk-linux-amd64"
-            chmod +x bazelisk
-          fi
-
       - name: Install (Windows)
         if: runner.os == 'Windows'
         run: |
@@ -85,4 +80,4 @@ jobs:
       - name: Build (bazel)
         if: matrix.bazel
         run: |
-          ./bazelisk build //...
+          bazelisk build //...
