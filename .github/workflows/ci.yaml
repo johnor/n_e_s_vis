@@ -15,10 +15,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: ubuntu-20.04-gcc-9
-            os: ubuntu-20.04
+          - name: ubuntu-22.04-gcc-12
+            os: ubuntu-22.04
             compiler: gcc
-            version: "10"
+            version: "12"
 
           - name: ubuntu-20.04-clang-14
             os: ubuntu-20.04
