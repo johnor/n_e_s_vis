@@ -12,9 +12,9 @@ load(
 
 git_repository(
     name = "nes",
-    commit = "d2b8a8377631ec94a3b0fb01cab60e1628d7c3d9",
+    commit = "0ae36a8d27562c15ed2ef90776b939030d0ff9ca",
     remote = "https://github.com/evilcorpltd/n_e_s",
-    shallow_since = "1651336399 +0200",
+    shallow_since = "1665248366 +0200",
 )
 
 # Third-party
