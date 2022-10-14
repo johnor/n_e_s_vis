@@ -102,7 +102,7 @@ void CpuWidget::draw() {
     }
     ImGui::SameLine();
     ImGui::SetNextItemWidth(button_size.x);
-    ImGui::InputScalar("",
+    ImGui::InputScalar("##CpuInputScalar",
             ImGuiDataType_U16,
             &jump_to_address_,
             nullptr,
