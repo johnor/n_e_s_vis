@@ -11,7 +11,7 @@ cc_library(
         "imgui-SFML_export.h",
     ],
     linkopts = select({
-        "@bazel_tools//platforms:windows": [
+        "@platforms//os:windows": [
             "-DEFAULTLIB:opengl32",
         ],
         "//conditions:default": [
