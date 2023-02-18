@@ -12,18 +12,18 @@ cc_library(
 cc_library(
     name = "ft2",
     srcs = select({
-        "@bazel_tools//platforms:windows": [
+        "@platforms//os:windows": [
             "extlibs/libs-msvc/x64/freetype.lib",
         ],
-        "@bazel_tools//platforms:linux": []
+        "@platforms//os:linux": []
     }),
     hdrs = glob([
         "extlibs/headers/freetype2/**/*.h",
     ]),
     linkopts = select({
-        "@bazel_tools//platforms:windows": [
+        "@platforms//os:windows": [
         ],
-        "@bazel_tools//platforms:linux": [
+        "@platforms//os:linux": [
             "-lfreetype",
         ],
     }),
@@ -35,11 +35,11 @@ cc_library(
     srcs = glob([
         "src/SFML/System/*.cpp",
     ]) + select({
-        "@bazel_tools//platforms:windows": glob([
+        "@platforms//os:windows": glob([
             "src/SFML/System/Win32/**/*.cpp",
             "src/SFML/System/Win32/**/*.hpp",
         ]),
-        "@bazel_tools//platforms:linux": glob([
+        "@platforms//os:linux": glob([
             "src/SFML/System/Unix/**/*.cpp",
             "src/SFML/System/Unix/**/*.hpp",
         ]),
@@ -52,10 +52,10 @@ cc_library(
     copts = ["-Iexternal/sfml/src/"],
     defines = ["SFML_STATIC"],
     linkopts = select({
-        "@bazel_tools//platforms:windows": [
+        "@platforms//os:windows": [
             "-DEFAULTLIB:winmm",
         ],
-        "@bazel_tools//platforms:linux": [
+        "@platforms//os:linux": [
             "-ludev",
             "-pthread",
         ],
@@ -78,11 +78,11 @@ cc_library(
             "src/SFML/Window/EGLCheck.hpp",
         ],
     ) + select({
-        "@bazel_tools//platforms:windows": glob([
+        "@platforms//os:windows": glob([
             "src/SFML/Window/Win32/**/*.cpp",
             "src/SFML/Window/Win32/**/*.hpp",
         ]),
-        "@bazel_tools//platforms:linux": glob([
+        "@platforms//os:linux": glob([
             "src/SFML/Window/Unix/**/*.cpp",
             "src/SFML/Window/Unix/**/*.hpp",
         ]),
@@ -97,14 +97,14 @@ cc_library(
         "_UNICODE",
     ],
     linkopts = select({
-        "@bazel_tools//platforms:windows": [
+        "@platforms//os:windows": [
             "-DEFAULTLIB:advapi32",
             "-DEFAULTLIB:gdi32",
             "-DEFAULTLIB:opengl32",
             "-DEFAULTLIB:user32",
             "-DEFAULTLIB:winmm",
         ],
-        "@bazel_tools//platforms:linux": [
+        "@platforms//os:linux": [
             "-lGL",
             "-lX11",
             "-lXrandr",
@@ -130,10 +130,10 @@ cc_library(
     copts = ["-Iexternal/sfml/src/"],
     defines = ["SFML_STATIC"],
     linkopts = select({
-        "@bazel_tools//platforms:windows": [
+        "@platforms//os:windows": [
             "-DEFAULTLIB:opengl32",
         ],
-        "@bazel_tools//platforms:linux": [
+        "@platforms//os:linux": [
             "-lGL",
             "-ludev",
             "-pthread",
